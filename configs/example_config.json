@@ -1,0 +1,6 @@
+{
+    "token": "YourPrivateToken",
+    "prefix": "!!",
+    "ownerID": "YourDiscordId",
+	"mongo_url": "mongodb://localhost:27017"
+}
