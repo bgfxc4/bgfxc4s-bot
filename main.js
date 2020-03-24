@@ -44,7 +44,7 @@ client.on('message', (msg) => {
 
         if(invoke in cmdmap){
             cmdmap[invoke](msg, args);
-            msg.channel.send(msg.member.roles.some(role => role.name === 'Verifiziert'));
+            //msg.channel.send(msg.member.roles.some(role => role.name === 'Verifiziert'));
         }else{
             msg.channel.send("Wrong Invoke!");
         }
