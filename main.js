@@ -51,6 +51,7 @@ function cmd_say(msg, args){
 
 function cmd_test(msg, args){
     console.log("test");
+
 }
 
 function cmd_addAce(msg, args){
@@ -65,6 +66,7 @@ function cmd_minusAce(msg, args){
 
 function cmd_printAce(msg, args){
     msg.channel.send("Currently there are " + AceCount + " Aces!");
+    console.log(AceCount);
 }
 
 function cmd_setAce(msg, args){
