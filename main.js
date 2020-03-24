@@ -101,4 +101,4 @@ function cmd_setRage(msg, args){
     msg.channel.send("Currently there are " + RageCount + " Rages!");
 }
 
-client.login(process.env.token);
+client.login(/*process.env.*/token);
