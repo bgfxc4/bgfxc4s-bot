@@ -7,6 +7,7 @@ const token = 'NjkxOTc5NDkyNjYyNDQ0MDcz.Xnn2VQ.kWh9Y6RggkEA3t9LmHOnVL4I-2U';
 var client = new Discord.Client();
 
 var AceCount = 0;
+var RageCount = 0;
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.username}...`)
@@ -18,7 +19,11 @@ var cmdmap = {
     addAce: cmd_addAce,
     minusAce: cmd_minusAce,
     ace: cmd_printAce,
-    setAce: cmd_setAce
+    setAce: cmd_setAce,
+    addRage: cmd_addRage,
+    minusRage: cmd_minusRage,
+    rage: cmd_printRage,
+    setRage: cmd_setRage
 }
 
 
@@ -73,6 +78,27 @@ function cmd_setAce(msg, args){
     AceCount = parseInt(args[0]);
 
     msg.channel.send("Currently there are " + AceCount + " Aces!");
+}
+
+function cmd_addRage(msg, args){
+    RageCount ++;
+    msg.channel.send("Currently there are " + RageCount + " Rages!");
+}
+
+function cmd_minusRage(msg, args){
+    RageCount --;
+    msg.channel.send("Currently there are " + RageCount + " Rages!");
+}
+
+function cmd_printRage(msg, args){
+    msg.channel.send("Currently there are " + RageCount + " Rages!");
+    console.log(RageCount);
+}
+
+function cmd_setRage(msg, args){
+    RageCount = parseInt(args[0]);
+
+    msg.channel.send("Currently there are " + RageCount + " Rages!");
 }
 
 client.login(process.env.token);
