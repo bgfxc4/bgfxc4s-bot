@@ -14,6 +14,7 @@ client.on('ready', () => {
 })
 
 var cmdmap = {
+    help: cmd_help,
     say: cmd_say,
     test: cmd_test,
     addAce: cmd_addAce,
@@ -48,6 +49,11 @@ client.on('message', (msg) => {
         }
     }
 })
+
+
+function cmd_help(msg, args){
+    msg.channel.send("Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,");
+}
 
 
 function cmd_say(msg, args){
