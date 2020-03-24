@@ -70,8 +70,9 @@ function cmd_printAce(msg, args){
 }
 
 function cmd_setAce(msg, args){
-    AceCount = parseInt(msg[0]);
-    
+  //  AceCount = parseInt(msg[0]);
+    console.log(msg);  
+
     msg.channel.send("Currently there are " + AceCount + " Aces!");
 }
 
