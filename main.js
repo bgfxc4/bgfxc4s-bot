@@ -36,7 +36,7 @@ client.on('message', (msg) => {
     var chan = msg.channel;
     var guil = msg.guild;
 
-    if(author.id != client.user.id && cont.startsWith(config.prefix)){
+    if(author.id != client.user.id && cont.startsWith(config.prefix) && msg.member.roles.find(r => r.name === "Verifiziert")){
         
         // ::say hello world!
         var invoke = cont.split(" ")[0].substring(config.prefix.length);
