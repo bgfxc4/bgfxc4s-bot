@@ -36,7 +36,7 @@ client.on('message', (msg) => {
     var chan = msg.channel;
     var guil = msg.guild;
 
-    if(author.id != client.user.id && cont.startsWith(config.prefix) && msg.member.roles.find(r => r.name === "Verifiziert")){
+    if(author.id != client.user.id && cont.startsWith(config.prefix)){
         
         // ::say hello world!
         var invoke = cont.split(" ")[0].substring(config.prefix.length);
@@ -44,6 +44,7 @@ client.on('message', (msg) => {
 
         if(invoke in cmdmap){
             cmdmap[invoke](msg, args);
+            msg.channel.send(msg.member.roles.some(role => role.name === 'Verifiziert'));
         }else{
             msg.channel.send("Wrong Invoke!");
         }
