@@ -40,16 +40,19 @@ client.on('message', (msg) => {
 
     try{
 
-        if(author.id != client.user.id && cont.startsWith(config.prefix)){
-            
-            // ::say hello world!
-            var invoke = cont.split(" ")[0].substring(config.prefix.length);
-            var args = cont.split(" ").slice(1);
+        if(author.id != null && client.user.id != null){
 
-            if(invoke in cmdmap){
-                cmdmap[invoke](msg, args);
-            }else{
-                msg.channel.send("Wrong Invoke!");
+            if(author.id != client.user.id && cont.startsWith(config.prefix)){
+            
+                // ::say hello world!
+                var invoke = cont.split(" ")[0].substring(config.prefix.length);
+                var args = cont.split(" ").slice(1);
+    
+                if(invoke in cmdmap){
+                    cmdmap[invoke](msg, args);
+                }else{
+                    msg.channel.send("Wrong Invoke!");
+                }
             }
         }
     }   
