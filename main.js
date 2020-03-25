@@ -70,6 +70,7 @@ function cmd_say(msg, args){
 
 function cmd_test(msg, args){
     console.log("test");
+    msg.channel.send("This is an test");
 
 }
 
