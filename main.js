@@ -75,6 +75,7 @@ function cmd_say(msg, args){
 function cmd_test(msg, args){
     console.log("test");
     msg.channel.send("This is an test");
+    console.log(client.guilds.size);
 
 }
 
@@ -123,7 +124,7 @@ function cmd_setRage(msg, args){
 function catchErr(err, message){/*
     client.users.get("581755729791418380").send("There was an error at channel " + message.channel + " in guild " + message.guild);
     client.users.get("581755729791418380").send("ERROR ```" + err + "```");*/
-    console.log(err);
+    console.log("Error(own): " + err);
 
 }
 
