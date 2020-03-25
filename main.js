@@ -68,6 +68,7 @@ function cmd_help(msg, args){
 
 
 function cmd_say(msg, args){
+    msg.delete(1000);
     msg.channel.send(args.join(' '));
 }
 
