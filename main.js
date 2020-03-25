@@ -115,9 +115,10 @@ function cmd_setRage(msg, args){
     msg.channel.send("Currently there are " + RageCount[msg.guild.id] + " Rages!");
 }
 
-function catchErr(err, message){
+function catchErr(err, message){/*
     client.users.get("581755729791418380").send("There was an error at channel " + message.channel + " in guild " + message.guild);
-    client.users.get("581755729791418380").send("ERROR ```" + err + "```");
+    client.users.get("581755729791418380").send("ERROR ```" + err + "```");*/
+    console.log(err);
 
 }
 
