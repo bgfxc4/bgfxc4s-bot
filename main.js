@@ -10,16 +10,8 @@ var AceCount = {};
 var RageCount = {};
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.username}...`)
+    console.log(`Logged in as ${client.user.username}...`);
 
-    for(var value in AceCount) {
-        value = 0;
-        console.log(value);
-    }
-    for(var value in RageCount){
-        value = 0;
-        console.log(value);
-    } 
 
 })
 
