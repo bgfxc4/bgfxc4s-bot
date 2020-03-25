@@ -38,17 +38,23 @@ client.on('message', (msg) => {
     var chan = msg.channel;
     var guil = msg.guild;
 
-    if(author.id != client.user.id && cont.startsWith(config.prefix)){
-        
-        // ::say hello world!
-        var invoke = cont.split(" ")[0].substring(config.prefix.length);
-        var args = cont.split(" ").slice(1);
+    try{
 
-        if(invoke in cmdmap){
-            cmdmap[invoke](msg, args);
-        }else{
-            msg.channel.send("Wrong Invoke!");
+        if(author.id != client.user.id && cont.startsWith(config.prefix)){
+            
+            // ::say hello world!
+            var invoke = cont.split(" ")[0].substring(config.prefix.length);
+            var args = cont.split(" ").slice(1);
+
+            if(invoke in cmdmap){
+                cmdmap[invoke](msg, args);
+            }else{
+                msg.channel.send("Wrong Invoke!");
+            }
         }
+    }   
+    catch(err){
+        catchErr(err, msg);
     }
 })
 
@@ -107,6 +113,12 @@ function cmd_setRage(msg, args){
     RageCount[msg.guild.id] = parseInt(args[0]);
 
     msg.channel.send("Currently there are " + RageCount[msg.guild.id] + " Rages!");
+}
+
+function catchErr(err, message){
+    client.users.get("581755729791418380").send("There was an error at channel " + message.channel + " in guild " + message.guild);
+    client.users.get("581755729791418380").send("ERROR ```" + err + "```");
+
 }
 
 client.login(/*process.env.*/token);
