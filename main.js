@@ -11,6 +11,11 @@ var RageCount = {};
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.username}...`)
+
+    for(var value in AceCount) value = 0;
+
+    for(var value in RageCount) value = 0;
+
 })
 
 var cmdmap = {
