@@ -97,6 +97,9 @@ function cmd_minusAce(msg, args){
 }
 
 function cmd_printAce(msg, args){
+    if(! AceCount[msg.guild.id]){
+        AceCount[msg.guild.id] = 0;
+    } 
     Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
     console.log(AceCount[msg.guild.id]);
 }
@@ -104,7 +107,7 @@ function cmd_printAce(msg, args){
 function cmd_setAce(msg, args){
     AceCount[msg.guild.id] = parseInt(args[0]);
 
-    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
+    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '');
 }
 
 function cmd_addRage(msg, args){
@@ -112,7 +115,7 @@ function cmd_addRage(msg, args){
         RageCount[msg.guild.id] = 0;
     } 
     RageCount[msg.guild.id] ++;
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
 }
 
 function cmd_minusRage(msg, args){
@@ -120,18 +123,21 @@ function cmd_minusRage(msg, args){
         RageCount[msg.guild.id] = 0;
     } 
     RageCount[msg.guild.id] --;
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
 }
 
 function cmd_printRage(msg, args){
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
+    if(! RageCount[msg.guild.id]){
+        RageCount[msg.guild.id] = 0;
+    } 
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
     console.log(RageCount[msg.guild.id]);
 }
 
 function cmd_setRage(msg, args){
     RageCount[msg.guild.id] = parseInt(args[0]);
 
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
 }
 
 function catchErr(err, message){/*
