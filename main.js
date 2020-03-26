@@ -95,8 +95,12 @@ function cmd_minusAce(msg, args){
     if(! AceCount[msg.guild.id]){
         AceCount[msg.guild.id] = 0;
     } 
-    AceCount[msg.guild.id] --;
-    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
+    if(AceCount[msg.guild.id] >= 1){
+        AceCount[msg.guild.id] --;
+        Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
+    }else{
+        Embeds.error(msg.channel, "The Ace Counter is already at 0", '');
+    }
 }
 
 function cmd_printAce(msg, args){
@@ -125,8 +129,12 @@ function cmd_minusRage(msg, args){
     if(! RageCount[msg.guild.id]){
         RageCount[msg.guild.id] = 0;
     } 
-    RageCount[msg.guild.id] --;
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
+    if(RageCount[msg.guild.id] >= 1){
+        RageCount[msg.guild.id] --;
+        Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
+    }else{
+        Embeds.error(msg.channel, "The Rage Counter is already at 0", '');
+    }
 }
 
 function cmd_printRage(msg, args){
