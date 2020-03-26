@@ -70,7 +70,7 @@ function cmd_help(msg, args){
 
 function cmd_say(msg, args){
     msg.channel.send(args.join(' '));
-    msg.delete(1000);
+  //  msg.delete(1000);
 }
 
 function cmd_test(msg, args){
@@ -81,11 +81,17 @@ function cmd_test(msg, args){
 }
 
 function cmd_addAce(msg, args){
+    if(! AceCount[msg.guild.id]){
+        AceCount[msg.guild.id] = 0;
+    } 
     AceCount[msg.guild.id] ++;
     Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
 }
 
 function cmd_minusAce(msg, args){
+    if(! AceCount[msg.guild.id]){
+        AceCount[msg.guild.id] = 0;
+    } 
     AceCount[msg.guild.id] --;
     Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
 }
@@ -102,11 +108,17 @@ function cmd_setAce(msg, args){
 }
 
 function cmd_addRage(msg, args){
+    if(! RageCount[msg.guild.id]){
+        RageCount[msg.guild.id] = 0;
+    } 
     RageCount[msg.guild.id] ++;
     Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
 }
 
 function cmd_minusRage(msg, args){
+    if(! RageCount[msg.guild.id]){
+        RageCount[msg.guild.id] = 0;
+    } 
     RageCount[msg.guild.id] --;
     Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
 }
