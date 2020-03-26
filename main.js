@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
-const Embeds = require('./embeds');
+const Embeds = require('./embed');
 
 const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 

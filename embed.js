@@ -1,4 +1,5 @@
-const { RichEmbed } = require('discord.js')
+const { RichEmbed } = require('discord.js');
+const Discord = require('discord.js');
 
 const COLORS = {
     red: 0xe74c3c,
@@ -10,7 +11,7 @@ module.exports = {
 
     error(chan, cont, title){
         var message;
-        var emb = new RichEmbed()
+        var emb = new Discord.RichEmbed()
             .setColor(COLORS.red)
             .setDescription(cont);
         if(title){
