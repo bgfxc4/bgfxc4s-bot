@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const Embeds = require('./embeds');
 
 const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
-const token = 'NjkxOTc5NDkyNjYyNDQ0MDcz.Xnn2VQ.kWh9Y6RggkEA3t9LmHOnVL4I-2U';
 
 var client = new Discord.Client();
 
@@ -63,7 +63,8 @@ client.on('message', (msg) => {
 
 
 function cmd_help(msg, args){
-    msg.channel.send("Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,");
+    Embeds.error(msg.channel, "Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,", '');
+    //msg.channel.send();
 }
 
 
@@ -128,4 +129,4 @@ function catchErr(err, message){/*
 
 }
 
-client.login(/*process.env.*/token);
+client.login(config.token);
