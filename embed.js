@@ -24,7 +24,17 @@ module.exports = {
     },
 
     info(chan, cont, title){
-
+        var message;
+        var emb = new Discord.MessageEmbed();
+            emb.setColor(COLORS.green);
+            emb.setDescription(cont);
+        if(title){
+            emb.setTitle(title);
+        }
+        chan.send('', emb).then((m) => {
+            message = m;
+        });
+        return message;
     }
 
 

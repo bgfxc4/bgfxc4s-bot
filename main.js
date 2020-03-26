@@ -63,7 +63,7 @@ client.on('message', (msg) => {
 
 
 function cmd_help(msg, args){
-    Embeds.error(msg.channel, "Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,", '');
+    Embeds.info(msg.channel, "Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,", '');
     //msg.channel.send();
 }
 
@@ -75,51 +75,51 @@ function cmd_say(msg, args){
 
 function cmd_test(msg, args){
     console.log("test");
-    msg.channel.send("This is an test");
-    console.log(client.guilds.size);
+    Embeds.info(msg.channel, "This is an test", '');
+    console.log(client.guilds);
 
 }
 
 function cmd_addAce(msg, args){
     AceCount[msg.guild.id] ++;
-    msg.channel.send("Currently there are " + AceCount[msg.guild.id] + " Aces!");
+    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
 }
 
 function cmd_minusAce(msg, args){
     AceCount[msg.guild.id] --;
-    msg.channel.send("Currently there are " + AceCount[msg.guild.id] + " Aces!");
+    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
 }
 
 function cmd_printAce(msg, args){
-    msg.channel.send("Currently there are " + AceCount[msg.guild.id] + " Aces!");
+    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
     console.log(AceCount[msg.guild.id]);
 }
 
 function cmd_setAce(msg, args){
     AceCount[msg.guild.id] = parseInt(args[0]);
 
-    msg.channel.send("Currently there are " + AceCount[msg.guild.id] + " Aces!");
+    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
 }
 
 function cmd_addRage(msg, args){
     RageCount[msg.guild.id] ++;
-    msg.channel.send("Currently there are " + RageCount[msg.guild.id] + " Rages!");
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
 }
 
 function cmd_minusRage(msg, args){
     RageCount[msg.guild.id] --;
-    msg.channel.send("Currently there are " + RageCount[msg.guild.id] + " Rages!");
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
 }
 
 function cmd_printRage(msg, args){
-    msg.channel.send("Currently there are " + RageCount[msg.guild.id] + " Rages!");
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
     console.log(RageCount[msg.guild.id]);
 }
 
 function cmd_setRage(msg, args){
     RageCount[msg.guild.id] = parseInt(args[0]);
 
-    msg.channel.send("Currently there are " + RageCount[msg.guild.id] + " Rages!");
+    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
 }
 
 function catchErr(err, message){/*
