@@ -1,13 +1,11 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const Embeds = require('./embed');
+const RageAndAce = require ('./RageAndAce');
 
 const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 
 var client = new Discord.Client();
-
-var AceCount = {};
-var RageCount = {};
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.username}...`);
@@ -19,14 +17,14 @@ var cmdmap = {
     help: cmd_help,
     say: cmd_say,
     test: cmd_test,
-    addAce: cmd_addAce,
-    minusAce: cmd_minusAce,
-    ace: cmd_printAce,
-    setAce: cmd_setAce,
-    addRage: cmd_addRage,
-    minusRage: cmd_minusRage,
-    rage: cmd_printRage,
-    setRage: cmd_setRage
+    addAce: RageAndAce.cmd_addAce,
+    minusAce: RageAndAce.cmd_minusAce,
+    ace: RageAndAce.cmd_printAce,
+    setAce: RageAndAce.cmd_setAce,
+    addRage: RageAndAce.cmd_addRage,
+    minusRage: RageAndAce.cmd_minusRage,
+    rage: RageAndAce.cmd_printRage,
+    setRage: RageAndAce.cmd_setRage
 }
 
 
@@ -81,81 +79,6 @@ function cmd_test(msg, args){
     Embeds.info(msg.channel, "This is an test", '');
 }
 
-function cmd_addAce(msg, args){
-    if(! AceCount[msg.guild.id]){
-        AceCount[msg.guild.id] = 0;
-    } 
-    AceCount[msg.guild.id] ++;
-    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
-}
-
-function cmd_minusAce(msg, args){
-    if(! AceCount[msg.guild.id]){
-        AceCount[msg.guild.id] = 0;
-    } 
-    if(AceCount[msg.guild.id] >= 1){
-        AceCount[msg.guild.id] --;
-        Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
-    }else{
-        Embeds.error(msg.channel, "The Ace Counter is already at 0", '');
-    }
-}
-
-function cmd_printAce(msg, args){
-    if(! AceCount[msg.guild.id]){
-        AceCount[msg.guild.id] = 0;
-    } 
-    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '')
-    console.log(AceCount[msg.guild.id]);
-}
-
-function cmd_setAce(msg, args){
-    if(parseInt(args[0]) >= 0){
-        AceCount[msg.guild.id] = parseInt(args[0]);
-
-        Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '');
-    }else{
-        Embeds.error(msg.channel, "The Ace Counter can't be negativ!", '');
-    }
-}
-
-function cmd_addRage(msg, args){
-    if(! RageCount[msg.guild.id]){
-        RageCount[msg.guild.id] = 0;
-    } 
-    RageCount[msg.guild.id] ++;
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
-}
-
-function cmd_minusRage(msg, args){
-    if(! RageCount[msg.guild.id]){
-        RageCount[msg.guild.id] = 0;
-    } 
-    if(RageCount[msg.guild.id] >= 1){
-        RageCount[msg.guild.id] --;
-        Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '')
-    }else{
-        Embeds.error(msg.channel, "The Rage Counter is already at 0", '');
-    }
-}
-
-function cmd_printRage(msg, args){
-    if(! RageCount[msg.guild.id]){
-        RageCount[msg.guild.id] = 0;
-    } 
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
-    console.log(RageCount[msg.guild.id]);
-}
-
-function cmd_setRage(msg, args){
-    if(parseInt(args[0]) >= 0){
-        RageCount[msg.guild.id] = parseInt(args[0]);
-
-        Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
-    }else{
-        Embeds.error(msg.channel, "The Rage Counter can't be negativ!", '');
-    }
-}
 
 function catchErr(err, message){/*
     client.users.get("581755729791418380").send("There was an error at channel " + message.channel + " in guild " + message.guild);
