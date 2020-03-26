@@ -79,8 +79,6 @@ function cmd_say(msg, args){
 function cmd_test(msg, args){
     console.log("test");
     Embeds.info(msg.channel, "This is an test", '');
-    console.log(client.guilds);
-
 }
 
 function cmd_addAce(msg, args){
@@ -112,7 +110,7 @@ function cmd_printAce(msg, args){
 }
 
 function cmd_setAce(msg, args){
-    if(parseInt(args[0]) > 0){
+    if(parseInt(args[0]) >= 0){
         AceCount[msg.guild.id] = parseInt(args[0]);
 
         Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '');
@@ -150,7 +148,7 @@ function cmd_printRage(msg, args){
 }
 
 function cmd_setRage(msg, args){
-    if(parseInt(args[0]) > 0){
+    if(parseInt(args[0]) >= 0){
         RageCount[msg.guild.id] = parseInt(args[0]);
 
         Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
