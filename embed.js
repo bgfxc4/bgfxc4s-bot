@@ -11,9 +11,9 @@ module.exports = {
 
     error(chan, cont, title){
         var message;
-        var emb = new Discord.RichEmbed()
-            .setColor(COLORS.red)
-            .setDescription(cont);
+        var emb = new Discord.MessageEmbed();
+            emb.setColor(COLORS.red);
+            emb.setDescription(cont);
         if(title){
             emb.setTitle(title);
         }
