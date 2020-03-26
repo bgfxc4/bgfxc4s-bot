@@ -112,9 +112,13 @@ function cmd_printAce(msg, args){
 }
 
 function cmd_setAce(msg, args){
-    AceCount[msg.guild.id] = parseInt(args[0]);
+    if(parseInt(args[0]) > 0){
+        AceCount[msg.guild.id] = parseInt(args[0]);
 
-    Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '');
+        Embeds.info(msg.channel, "Currently there are " + AceCount[msg.guild.id] + " Aces!", '');
+    }else{
+        Embeds.error(msg.channel, "The Ace Counter can't be negativ!", '');
+    }
 }
 
 function cmd_addRage(msg, args){
@@ -146,9 +150,13 @@ function cmd_printRage(msg, args){
 }
 
 function cmd_setRage(msg, args){
-    RageCount[msg.guild.id] = parseInt(args[0]);
+    if(parseInt(args[0]) > 0){
+        RageCount[msg.guild.id] = parseInt(args[0]);
 
-    Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
+        Embeds.info(msg.channel, "Currently there are " + RageCount[msg.guild.id] + " Rages!", '');
+    }else{
+        Embeds.error(msg.channel, "The Rage Counter can't be negativ!", '');
+    }
 }
 
 function catchErr(err, message){/*
