@@ -70,7 +70,10 @@ function cmd_help(msg, args){
 
 function cmd_say(msg, args){
     msg.channel.send(args.join(' '));
-  //  msg.delete(1000);
+    
+    msg.delete()
+  .then(msg => console.log(`Deleted message from ${msg.author.username}`))
+  .catch(console.error);
 }
 
 function cmd_test(msg, args){
