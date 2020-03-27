@@ -26,7 +26,7 @@ var cmdmap = {
     minusRage: RageAndAce.cmd_minusRage,
     rage: RageAndAce.cmd_printRage,
     setRage: RageAndAce.cmd_setRage,
-    remindTower: Music.cmd_remindTower
+    join: Music.cmd_join
 }
 
 
