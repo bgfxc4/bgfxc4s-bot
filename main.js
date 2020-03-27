@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const Embeds = require('./Commands/embed');
 const RageAndAce = require ('./Commands/RageAndAce');
+const Music = require('./Commands/Music');
 
 const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 
@@ -24,12 +25,15 @@ var cmdmap = {
     addRage: RageAndAce.cmd_addRage,
     minusRage: RageAndAce.cmd_minusRage,
     rage: RageAndAce.cmd_printRage,
-    setRage: RageAndAce.cmd_setRage
+    setRage: RageAndAce.cmd_setRage,
+    remindTower: Music.cmd_remindTower
 }
 
 
 
 client.on('message', (msg) => {
+
+    if (!msg.guild) return;
 
     var cont = msg.content;
     var author = msg.member;
