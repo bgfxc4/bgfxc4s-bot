@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
-const Embeds = require('./embed');
-const RageAndAce = require ('./RageAndAce');
+const Embeds = require('./Commands/embed');
+const RageAndAce = require ('./Commands/RageAndAce');
 
 const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 
