@@ -7,7 +7,7 @@ module.exports = {
     cmd_remindTower(msg, args, client){
         
         if (message.member.voice.channel) {
-            const connection = await message.member.voice.channel.join();
+            const connection = message.member.voice.channel.join();
 
             dispatcher = connection.play(RemindTowerFile);
 

@@ -31,7 +31,7 @@ var cmdmap = {
 
 
 
-client.on('message', async (msg) => {
+client.on('message', (msg) => {
 
     if (!msg.guild) return;
 
