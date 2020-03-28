@@ -55,7 +55,7 @@ client.on('message', (msg) => {
                 if(invoke in cmdmap){
                     cmdmap[invoke](msg, args);
                 }else{
-                    msg.channel.send("Wrong Invoke!");
+                    Embeds.error(msg.channel, "Wrong Invoke!", '');
                 }
             }
         }
