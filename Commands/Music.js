@@ -10,6 +10,7 @@ module.exports = {
         if (msg.member.voice.channel) {
             connection = msg.member.voice.channel.join().then(connection => {
               connection.play(RemindTowerFile);
+              console.log("playing")
             });
 /*
             dispatcher = connection.play(RemindTowerFile);
