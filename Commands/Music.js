@@ -30,10 +30,15 @@ module.exports = {
       msg.member.voice.channel.leave();
     },
 
-    cmd_playRemindTower(msg, args, client){
-        if(connection == 'undefined') return;
-
-        dispatcher = connection.play(RemindTowerFile);
+    async cmd_playRemindTower(msg, args, client){
+      let voice_channel = msg.member.voice.channel;
+      let connection = await voice_channel.join()
+      const dispatcher = connection.play(RemindTowerFile)
+                  .on("end",()=>{
+                      console.log("Music Ended")
+                      voice_channel.leave()
+                  })
+                  .on("error",error=>{console.error(error)});
     }
     
 }
