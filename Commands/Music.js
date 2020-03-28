@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const RemindTowerFile = './Files/test.mp3'
+const RemindTowerFile = '/Files/test.mp3'
 const Embeds = require('./embed');
 var dispatcher;
 var connection;
@@ -8,7 +8,9 @@ module.exports = {
     cmd_join(msg, args, client){
         
         if (msg.member.voice.channel) {
-            connection = msg.member.voice.channel.join();
+            connection = msg.member.voice.channel.join().then(connection => {
+              connection.play(RemindTowerFile);
+            });
 /*
             dispatcher = connection.play(RemindTowerFile);
 
