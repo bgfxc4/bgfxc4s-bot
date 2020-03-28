@@ -82,7 +82,7 @@ function cmd_say(msg, args){
 
 function cmd_test(msg, args){
     console.log("test");
-    Embeds.info(msg.channel, "This is an test", '');
+    Embeds.info(msg.channel, "This is a test", '');
 }
 
 
