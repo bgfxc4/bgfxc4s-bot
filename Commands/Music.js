@@ -2,25 +2,17 @@ const Discord = require('discord.js');
 const RemindTowerFile = '/test.mp3';
 const Embeds = require('./embed');
 var dispatcher;
-var channel = {};
+var connection;
 
 module.exports = {
     cmd_join(msg, args){
         
         if (msg.member.voice.channel) {
-            channel[msg.guild.id] = msg.member.voice.channel.join().then(connection => {
-              channel[msg.guild.id].play(RemindTowerFile);
+              connection = msg.member.voice.channel.join().then(connection => {
+              connection.play(RemindTowerFile);
               console.log("playing")
-              console.log(channel[msg.guild.id].status);
+              console.log(connection.status);
             });
-/*
-            dispatcher = connection.play(RemindTowerFile);
-
-            dispatcher.on('finish', () => {
-                console.log('Finished playing!');
-              });
-              
-              dispatcher.destroy(); // end the stream*/
           } else {
             Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
           }
@@ -30,13 +22,15 @@ module.exports = {
       msg.member.voice.channel.leave();
     },
 
-    async cmd_playRemindTower(msg, args){
-      if(!channel[msg.guild.id]) {
-        Embeds.error(msg.channel, 'The bot is currently not in a Channel, use !!join!');
-        return;
+    cmd_playRemindTower(msg, args){
+        if (msg.member.voice.channel) {
+          connection = msg.member.voice.channel.join().then(connection => {
+          connection.play(RemindTowerFile);
+          console.log("playing")
+          console.log(connection.status);
+        });
+      } else {
+        Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
       }
-      channel[msg.guild.id].play(RemindTowerFile);
-
-    }
-    
+   }
 }
