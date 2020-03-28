@@ -9,7 +9,7 @@ module.exports = {
         
         if (msg.member.voice.channel) {
             connection = msg.member.voice.channel.join().then(connection => {
-              connection.play(RemindTowerFile);
+              connection.play('/Files/test.mp3');
               console.log("playing")
             });
 /*
