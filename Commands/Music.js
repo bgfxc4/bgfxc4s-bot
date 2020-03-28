@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const RemindTowerFile = './Files.test.mp3';
+const RemindTowerFile = '/test.mp3';
 const Embeds = require('./embed');
 var dispatcher;
 var connection;
@@ -9,7 +9,7 @@ module.exports = {
         
         if (msg.member.voice.channel) {
             connection = msg.member.voice.channel.join().then(connection => {
-              connection.play('./test.mp3');
+              connection.play(RemindTowerFile);
               console.log("playing")
               console.log(connection.status);
             });
