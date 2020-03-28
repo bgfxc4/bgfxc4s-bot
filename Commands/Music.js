@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const RemindTowerFile = '/Files/test.mp3'
+const RemindTowerFile = './Files.test.mp3';
 const Embeds = require('./embed');
 var dispatcher;
 var connection;
