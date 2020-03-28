@@ -24,6 +24,12 @@ module.exports = {
 
     cmd_leave(msg, args, client){
       msg.member.voice.channel.leave();
-    }
+    },
 
+    cmd_playRemindTower(msg, args, client){
+        if(connection == 'undefined') return;
+
+        dispatcher = connection.play(RemindTowerFile);
+    }
+    
 }
