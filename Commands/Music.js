@@ -2,16 +2,16 @@ const Discord = require('discord.js');
 const RemindTowerFile = '/test.mp3';
 const Embeds = require('./embed');
 var dispatcher;
-var connection;
+var channel = {};
 
 module.exports = {
-    cmd_join(msg, args, client){
+    cmd_join(msg, args){
         
         if (msg.member.voice.channel) {
-            connection = msg.member.voice.channel.join().then(connection => {
-              connection.play(RemindTowerFile);
+            channel[msg.guild.id] = msg.member.voice.channel.join().then(connection => {
+              channel[msg.guild.id].play(RemindTowerFile);
               console.log("playing")
-              console.log(connection.status);
+              console.log(channel[msg.guild.id].status);
             });
 /*
             dispatcher = connection.play(RemindTowerFile);
@@ -26,19 +26,17 @@ module.exports = {
           }
     },
 
-    cmd_leave(msg, args, client){
+    cmd_leave(msg, args){
       msg.member.voice.channel.leave();
     },
 
-    async cmd_playRemindTower(msg, args, client){
-      let voice_channel = msg.member.voice.channel;
-      let connection = await voice_channel.join()
-      const dispatcher = connection.play(RemindTowerFile)
-                  .on("end",()=>{
-                      console.log("Music Ended")
-                      voice_channel.leave()
-                  })
-                  .on("error",error=>{console.error(error)});
+    async cmd_playRemindTower(msg, args){
+      if(!channel[msg.guild.id]) {
+        Embeds.error(msg.channel, 'The bot is currently not in a Channel, use !!join!');
+        return;
+      }
+      channel[msg.guild.id].play(RemindTowerFile);
+
     }
     
 }
