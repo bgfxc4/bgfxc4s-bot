@@ -20,5 +20,10 @@ module.exports = {
           } else {
             Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
           }
+    },
+
+    cmd_leave(msg, args, client){
+      msg.member.voice.channel.leave();
     }
+
 }
