@@ -11,6 +11,7 @@ module.exports = {
             connection = msg.member.voice.channel.join().then(connection => {
               connection.play('/Files/test.mp3');
               console.log("playing")
+              console.log(connection.status);
             });
 /*
             dispatcher = connection.play(RemindTowerFile);
