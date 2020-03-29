@@ -33,16 +33,23 @@ module.exports = {
    },
 
    cmd_playJebaited(msg, args){
-    if (msg.member.voice.channel) {
-      connection = msg.member.voice.channel.join().then(connection => {
+      if (msg.member.voice.channel) {
+        connection = msg.member.voice.channel.join().then(connection => {
 
-      connection.play(JebaitedFile, { volume: 0.5 });
-      console.log("playing")
-      console.log(connection.status);
-    });
+        connection.play(JebaitedFile, { volume: 0.2 });
+        console.log("playing")
+        console.log(connection.status);
+      });
+    } else {
+      Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
+    }
+  },
+
+  cmd_stopPlaying(msg, args){
+    if (msg.member.voice.channel) {
+      connection = msg.member.voice.channel.leave();
   } else {
     Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
   }
-}
-
+  }
 }

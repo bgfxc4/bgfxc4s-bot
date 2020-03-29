@@ -29,7 +29,8 @@ var cmdmap = {
     join: Music.cmd_join,
     leave: Music.cmd_leave,
     playRemindTower: Music.cmd_playRemindTower,
-    playJebaited: Music.cmd_playJebaited
+    playJebaited: Music.cmd_playJebaited,
+    stopPlaying: Music.cmd_stopPlaying
 }
 
 
@@ -68,7 +69,7 @@ client.on('message', (msg) => {
 
 
 function cmd_help(msg, args){
-    Embeds.info(msg.channel, "Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,\nplayRemindTower, playJebaited", '');
+    Embeds.info(msg.channel, "Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,\nplayRemindTower, playJebaited, stopPlaying", '');
     //msg.channel.send();
 }
 
