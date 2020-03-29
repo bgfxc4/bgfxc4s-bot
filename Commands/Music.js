@@ -25,7 +25,8 @@ module.exports = {
     cmd_playRemindTower(msg, args){
         if (msg.member.voice.channel) {
           connection = msg.member.voice.channel.join().then(connection => {
-          connection.play(RemindTowerFile);
+         // connection.play(RemindTowerFile);
+          connection.play(ytdl('https://www.youtube.com/watch?v=ZlAU_w7-Xp8', { quality: 'highestaudio' }));
           console.log("playing")
           console.log(connection.status);
         });
