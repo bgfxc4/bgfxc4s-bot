@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const RemindTowerFile = '/app/test.mp3';
+const RemindTowerFile = '/app/Commands/Files/test.mp3';
 const Embeds = require('./embed');
 var dispatcher;
 var connection;
@@ -8,11 +8,7 @@ module.exports = {
     cmd_join(msg, args){
         
         if (msg.member.voice.channel) {
-              connection = msg.member.voice.channel.join().then(connection => {
-              connection.play(RemindTowerFile);
-              console.log("playing")
-              console.log(connection.status);
-            });
+              connection = msg.member.voice.channel.join();
           } else {
             Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
           }
