@@ -45,7 +45,7 @@ module.exports = {
           connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100 )});
           console.log("playing")
           console.log(connection.status);
-          console.log(args[0] == 'undefined');
+          console.log(args[0] == undefined);
         }
       });
     } else {
