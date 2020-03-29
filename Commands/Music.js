@@ -25,6 +25,9 @@ module.exports = {
     cmd_playRemindTower(msg, args){
         if (msg.member.voice.channel) {
           connection = msg.member.voice.channel.join().then(connection => {
+            connection.on('error', (con) =>{
+              console.log("eroor");
+            })
          // connection.play(RemindTowerFile);
           connection.play(ytdl('https://www.youtube.com/watch?v=ZlAU_w7-Xp8', { quality: 'highestaudio' }));
           console.log("playing")
@@ -34,4 +37,5 @@ module.exports = {
         Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
       }
    }
+
 }
