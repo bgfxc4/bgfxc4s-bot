@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
-const RemindTowerFile = '/test.mp3';
+const RemindTowerFile = '/app/test.mp3';
 const Embeds = require('./embed');
-const ytdl = require('ytdl');
 var dispatcher;
 var connection;
 
@@ -29,8 +28,7 @@ module.exports = {
             connection.on('error', (con) =>{
               console.log("eroor");
             })
-         // connection.play(RemindTowerFile);
-          connection.play(ytdl('https://www.youtube.com/watch?v=ZlAU_w7-Xp8', { quality: 'highestaudio' }));
+          connection.play(RemindTowerFile);
           console.log("playing")
           console.log(connection.status);
         });
