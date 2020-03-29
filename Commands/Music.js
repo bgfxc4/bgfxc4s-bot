@@ -25,9 +25,7 @@ module.exports = {
     cmd_playRemindTower(msg, args){
         if (msg.member.voice.channel) {
           connection = msg.member.voice.channel.join().then(connection => {
-            connection.on('error', (con) =>{
-              console.log("eroor");
-            })
+
           connection.play(RemindTowerFile);
           console.log("playing")
           console.log(connection.status);
