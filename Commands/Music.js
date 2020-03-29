@@ -38,13 +38,14 @@ module.exports = {
 
         var volume = parseInt(args[0]);  
 
-        if(volume == 'NaN' || volume == 0){
+        if(volume == 'NaN' || volume == 'undefined'){
           Embeds.error(msg.channel, 'Argument must be an Number', '');
           console.log(volume);
         }else {
           connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100 )});
           console.log("playing")
           console.log(connection.status);
+          console.log(volume);
         }
       });
     } else {
