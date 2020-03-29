@@ -38,7 +38,7 @@ module.exports = {
 
         var volume = parseInt(args[0]);  
 
-        if(volume == 'NaN'){
+        if(volume == 'NaN' || volume == 0){
           Embeds.error(msg.channel, 'Argument must be an Number', '');
           console.log(volume);
         }else {
