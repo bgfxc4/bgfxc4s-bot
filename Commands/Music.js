@@ -19,6 +19,7 @@ module.exports = {
           }
     },
 
+    
     cmd_leave(msg, args){
       msg.member.voice.channel.leave();
     },
