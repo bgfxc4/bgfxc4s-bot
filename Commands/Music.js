@@ -38,7 +38,7 @@ module.exports = {
 
         var volume = parseInt(args[0]);  
 
-        if(args[0] == ''){
+        if(args[0] == 'undefined'){
           Embeds.error(msg.channel, 'Argument must be an Number', '');
           console.log(args[0] + " is not a Number");
         }else {
