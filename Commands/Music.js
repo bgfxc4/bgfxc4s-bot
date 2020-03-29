@@ -33,23 +33,23 @@ module.exports = {
    },
 
    cmd_playJebaited(msg, args){
-      if (msg.member.voice.channel) {
-        connection = msg.member.voice.channel.join().then(connection => {
+    var volume = parseInt(args[0]);  
 
-        var volume = parseInt(args[0]);  
+    if(args[0] == undefined){
 
-        if(args[0] == undefined){
-          Embeds.error(msg.channel, 'Argument must be an Number', '');
-          console.log(args[0] + " is not a Number");
-        }else {
-          connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100 )});
-          console.log("playing")
-          console.log(connection.status);
-        }
-      });
-    } else {
-      Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
-    }
+        if (msg.member.voice.channel) {
+          connection = msg.member.voice.channel.join().then(connection => {
+            Embeds.error(msg.channel, 'Argument must be an Number', '');
+            console.log(args[0] + " is not a Number");
+        });
+      } else {
+        Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
+      }
+      }else {
+        connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100 )});
+        console.log("playing")
+        console.log(connection.status);
+      }
   },
 
   cmd_stopPlaying(msg, args){
