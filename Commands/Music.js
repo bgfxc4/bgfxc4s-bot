@@ -42,9 +42,9 @@ module.exports = {
             Embeds.error(msg.channel, 'Argument must be an Number', '');
             console.log(args[0] + " is not a Number");
         });
-      } else {
-        Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
-      }
+        } else {
+          Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
+        }
       }else {
         connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100 )});
         console.log("playing")
