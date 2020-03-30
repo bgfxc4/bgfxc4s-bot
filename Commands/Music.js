@@ -22,6 +22,10 @@ module.exports = {
     cmd_playRemindTower(msg, args){
       var volume = parseInt(args[0]);  
 
+      if(volume >= 1000){
+        Embeds.error(msg.channel, "Volume cont be more than 1000");
+        return;
+    }
     
       if(args[0] == undefined){
   
@@ -41,6 +45,10 @@ module.exports = {
    cmd_playJebaited(msg, args){
     var volume = parseInt(args[0]);  
 
+    if(volume >= 1000){
+        Embeds.error(msg.channel, "Volume cont be more than 1000");
+        return;
+    }
 
     if(args[0] == undefined){
 
