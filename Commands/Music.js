@@ -30,7 +30,7 @@ module.exports = {
         }else {
           if (msg.member.voice.channel) {
             connection = msg.member.voice.channel.join().then(connection => {
-              connection.play(RemindTowerFile, { volume: 0.2 *( volume  / 100 )});
+              connection.play(RemindTowerFile, { volume:  volume  / 100});
           });
           } else {
             Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
@@ -49,7 +49,7 @@ module.exports = {
       }else {
         if (msg.member.voice.channel) {
           connection = msg.member.voice.channel.join().then(connection => {
-            connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100 )});
+            connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100)});
         });
         } else {
           Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
