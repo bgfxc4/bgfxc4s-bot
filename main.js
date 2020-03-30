@@ -30,7 +30,8 @@ var cmdmap = {
     leave: Music.cmd_leave,
     playRemindTower: Music.cmd_playRemindTower,
     playJebaited: Music.cmd_playJebaited,
-    stopPlaying: Music.cmd_stopPlaying
+    stopPlaying: Music.cmd_stopPlaying,
+    playBOOM: Music.cmd_playBOOM 
 }
 
 

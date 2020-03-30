@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const RemindTowerFile = '/app/Commands/Files/test.mp3';
 const JebaitedFile = '/app/Commands/Files/Jebaited.mp3';
+const BoomFile = '/app/Commands/Files/boomFile.mp3';
 const Embeds = require('./embed');
 var dispatcher;
 var connection;
@@ -58,6 +59,29 @@ module.exports = {
         if (msg.member.voice.channel) {
           connection = msg.member.voice.channel.join().then(connection => {
             connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100)});
+        });
+        } else {
+          Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
+        }
+      }
+  },
+
+  cmd_playBOOM(msg, args){
+    var volume = parseInt(args[0]);  
+
+    if(volume > 1000){
+        Embeds.error(msg.channel, "Volume can't be more than 1000");
+        return;
+    }
+
+    if(args[0] == undefined){
+
+      Embeds.error(msg.channel, 'Argument must be an Number', '');
+      console.log(args[0] + " is not a Number");
+      }else {
+        if (msg.member.voice.channel) {
+          connection = msg.member.voice.channel.join().then(connection => {
+            connection.play(BoomFile, { volume: 0.2 *( volume  / 100)});
         });
         } else {
           Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
