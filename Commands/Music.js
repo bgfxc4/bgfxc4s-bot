@@ -20,22 +20,28 @@ module.exports = {
     },
 
     cmd_playRemindTower(msg, args){
-        if (msg.member.voice.channel) {
-          connection = msg.member.voice.channel.join().then(connection => {
+      var volume = parseInt(args[0]);  
 
-          connection.play(RemindTowerFile);
-          console.log("playing")
-          console.log(connection.status);
-        });
-      } else {
-        Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
-      }
+    
+      if(args[0] == undefined){
+  
+        Embeds.error(msg.channel, 'Argument must be an Number', '');
+        console.log(args[0] + " is not a Number");
+        }else {
+          if (msg.member.voice.channel) {
+            connection = msg.member.voice.channel.join().then(connection => {
+              connection.play(RemindTowerFile, { volume: 0.2 *( volume  / 100 )});
+          });
+          } else {
+            Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
+          }
+        }
    },
 
    cmd_playJebaited(msg, args){
     var volume = parseInt(args[0]);  
 
-    
+
     if(args[0] == undefined){
 
       Embeds.error(msg.channel, 'Argument must be an Number', '');
@@ -44,8 +50,6 @@ module.exports = {
         if (msg.member.voice.channel) {
           connection = msg.member.voice.channel.join().then(connection => {
             connection.play(JebaitedFile, { volume: 0.2 *( volume  / 100 )});
-            console.log("playing")
-            console.log(connection.status);
         });
         } else {
           Embeds.error(msg.channel, 'You need to join a voice channel first!', '');
