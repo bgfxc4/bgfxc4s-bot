@@ -23,7 +23,7 @@ module.exports = {
       var volume = parseInt(args[0]);  
 
       if(volume > 1000){
-        Embeds.error(msg.channel, "Volume can´t be more than 1000");
+        Embeds.error(msg.channel, "Volume can't be more than 1000");
         return;
     }
     
@@ -46,7 +46,7 @@ module.exports = {
     var volume = parseInt(args[0]);  
 
     if(volume > 1000){
-        Embeds.error(msg.channel, "Volume can´t be more than 1000");
+        Embeds.error(msg.channel, "Volume can't be more than 1000");
         return;
     }
 
