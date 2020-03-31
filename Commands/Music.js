@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const RemindTowerFile = '/app/Commands/Files/test.mp3';
+const RemindTowerFile = '/app/Commands/Files/RemindTowerFile.mp3';
 const JebaitedFile = '/app/Commands/Files/Jebaited.mp3';
 const BoomFile = '/app/Commands/Files/boomFile.mp3';
 const Embeds = require('./embed');
