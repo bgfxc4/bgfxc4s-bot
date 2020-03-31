@@ -10,6 +10,9 @@ const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 
 var client = new Discord.Client();
 
+var blacklist = [];
+var blacklistActive = false;
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.username}...`);
 
@@ -59,7 +62,10 @@ client.on('message', (msg) => {
                 var invoke = cont.split(" ")[0].substring(config.prefix.length);
                 var args = cont.split(" ").slice(1);
     
-                if(invoke in cmdmap){
+                if (invoke in cmdmap) {
+                    
+                    if (checkForBlacklist(msg.author)) return Embeds.error(msg.channel, 'You are on the Blacklist!', '');
+
                     cmdmap[invoke](msg, args);
                 }else{
                     Embeds.error(msg.channel, "Wrong Invoke!", '');
@@ -99,5 +105,20 @@ function catchErr(err, message){/*
     console.log("Error(own): " + err);
 
 }
+
+function cmd_AddBacklist(msg, args) {
+    blacklist.push(args[0]);
+    console.log(blacklist);
+}
+
+function checkForBlacklist(id) {
+    for (let i = 0; i < blacklist.length; i++){
+        if (blacklist[i] == id) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 client.login(config.token);
