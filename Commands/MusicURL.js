@@ -2,7 +2,7 @@ const ytdl = require('ytdl-core');
 const Embeds = require('./embed');
 
 module.exports = {
-    cmd_playURL(msg, args){
+    async cmd_playURL(msg, args){
         if(args[0] == undefined){
 
             Embeds.error(msg.channel, 'Argument must be an URL', '');
