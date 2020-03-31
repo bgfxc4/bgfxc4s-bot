@@ -38,7 +38,8 @@ var cmdmap = {
     stopPlaying: Music.cmd_stopPlaying,
     playBOOM: Music.cmd_playBOOM,
     play: MusicURL.cmd_playURL,
-    clearChat: chatCommands.cmd_clearChat
+    clearChat: chatCommands.cmd_clearChat,
+    addBlacklist: cmd_AddBacklist
 }
 
 
