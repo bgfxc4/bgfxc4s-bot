@@ -109,7 +109,7 @@ function catchErr(err, message){/*
 
 function cmd_AddBacklist(msg, args) {
 
-    if (msg.author.id != '581755729791418380') return Embeds.error(msg.channel, 'You have not enought Permissions to blacklist somebody!', '');
+    if (msg.author.id != '581755729791418380') return Embeds.error(msg.channel, 'You have not enough Permissions to blacklist somebody!', '');
 
     blacklist.push(args[0]);
     console.log(blacklist);
