@@ -46,7 +46,7 @@ client.on('message', (msg) => {
     var author = msg.member;
     var chan = msg.channel;
     var guil = msg.guild;
-
+    
     try{
 
         if(author.id != null && client.user.id != null){
