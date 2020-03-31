@@ -3,7 +3,8 @@ const fs = require('fs');
 const Embeds = require('./Commands/embed');
 const RageAndAce = require ('./Commands/RageAndAce');
 const Music = require('./Commands/Music');
-const MusicURL = require('./Commands/MusicURL')
+const MusicURL = require('./Commands/MusicURL');
+const chatCommands = require('./Commands/chatCommands');
 
 const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 
@@ -33,7 +34,8 @@ var cmdmap = {
     playJebaited: Music.cmd_playJebaited,
     stopPlaying: Music.cmd_stopPlaying,
     playBOOM: Music.cmd_playBOOM,
-    play: MusicURL.cmd_playURL
+    play: MusicURL.cmd_playURL,
+    clearChat: chatCommands.cmd_clearChat
 }
 
 
