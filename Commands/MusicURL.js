@@ -16,7 +16,7 @@ module.exports = {
             let info = await ytdl.getInfo(args[0]);
 
               if (msg.member.voice.channel) {
-                connection = msg.member.voice.channel.join().then(connection => {
+                connection = msg.member.voice.channel.join().then(async (connection) => {
 
                 let dispatcher = await connection.play(ytdl(args[0]), {filter : 'audioonly'});
                 
