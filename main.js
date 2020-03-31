@@ -122,4 +122,5 @@ function checkForBlacklist(id) {
 }
 
 
+
 client.login(config.token);
