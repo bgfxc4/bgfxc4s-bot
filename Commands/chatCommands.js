@@ -3,7 +3,7 @@ const Embeds = require('./embed');
 module.exports = {
 
     cmd_clearChat(msg, args) {
-        msg.channel.send(".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChannel cleared!.");
+        Embeds.info(msg.channel, 'Channel cleared!', '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
     }
 
 }
