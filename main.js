@@ -40,7 +40,8 @@ var cmdmap = {
     play: MusicURL.cmd_playURL,
     clearChat: chatCommands.cmd_clearChat,
     addBlacklist: cmd_AddBacklist,
-    toggleBlacklist: cmd_toggleBlacklist
+    toggleBlacklist: cmd_toggleBlacklist,
+    blacklistInfo: cmd_blacklist
 }
 
 
@@ -128,6 +129,10 @@ function checkForBlacklist(id) {
     return false;
 }
 
+function cmd_blacklist(msg, args) {
+    if (blacklistActive) return Embeds.info(msg.channel, 'The blacklist is active with ' + blacklist.length + ' members' + '');
+    if (!blacklistActive) return Embeds.info(msg.channel, 'The blacklist is not active' + '');
+}
 
 function cmd_toggleBlacklist(msg, args) {
     if (blacklistActive) {
