@@ -39,7 +39,8 @@ var cmdmap = {
     playBOOM: Music.cmd_playBOOM,
     play: MusicURL.cmd_playURL,
     clearChat: chatCommands.cmd_clearChat,
-    addBlacklist: cmd_AddBacklist
+    addBlacklist: cmd_AddBacklist,
+    toggleBlacklist: cmd_toggleBlacklist
 }
 
 
@@ -116,12 +117,26 @@ function cmd_AddBacklist(msg, args) {
 }
 
 function checkForBlacklist(id) {
+
+    if (!blacklistActive) return false;
+
     for (let i = 0; i < blacklist.length; i++){
         if (blacklist[i] == id) {
             return true;
         }
     }
     return false;
+}
+
+
+function cmd_toggleBlacklist(msg, args) {
+    if (blacklistActive) {
+        Embeds.info(msg.channel, "Deactivated Blacklist!");
+        blacklistActive = false;
+    } else {
+        Embeds.info(msg.channel, "Activated Blacklist!");
+        blacklistActive = true;
+    }
 }
 
 
