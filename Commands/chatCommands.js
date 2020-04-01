@@ -13,7 +13,7 @@ module.exports = {
         }
 
         if (isNaN(args[0]) || parseInt(args[0]) <= 0) {
-            return Embeds.error(msg.channel, "Yeah... That's not a number? I also cant't delete 0 messages by teh way", '');
+            return Embeds.error(msg.channel, "Yeah... That's not a number? I also cant't delete 0 messages by the way", '');
         }
 
         if (!msg.guild.me.hasPermission("MANAGE_MESSAGES")) {
