@@ -28,7 +28,7 @@ module.exports = {
             deleteAmount = parseInt(args[0]);
         }
 
-        msg.channel.bulkDelete(deleteAmount, true).then(deleted => Embeds.info(msg.channel, 'I deleted \`${deleted.size}\` messages.', '')).catch(err => Embeds.error(msg.channel, 'Something went wrong!', ''));
+        msg.channel.bulkDelete(deleteAmount, true).then(deleted => Embeds.info(msg.channel, `I deleted \`${deleted.size}\` messages.`, '')).catch(err => Embeds.error(msg.channel, 'Something went wrong!', ''));
 
     }
 }
