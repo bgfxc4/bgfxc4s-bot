@@ -11,7 +11,7 @@ module.exports = {
 
             let validate  = await ytdl.validateURL(args[0]);
             
-           // if(!validate) return Embeds.error(msg.channel, 'Please input a **valid** url following the command');
+            if(!validate) return Embeds.error(msg.channel, 'Please input a **valid** url following the command');
             
             let info = await ytdl.getInfo(args[0]);
 
