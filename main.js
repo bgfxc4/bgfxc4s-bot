@@ -1,150 +1,66 @@
-const Discord = require('discord.js');
-const fs = require('fs');
-const Embeds = require('./Commands/embed');
-const RageAndAce = require ('./Commands/RageAndAce');
-const Music = require('./Commands/Music');
-const MusicURL = require('./Commands/MusicURL');
-const chatCommands = require('./Commands/chatCommands');
+const Discord = require("discord.js");
+const fs = require("fs");
+const { log } = require("util");
+const { error } = require("console");
 
-const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+const embeds = require("./Commands/embed.js");
+const tagesschau = require("./Commands/tagesschau.js");
+
+const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
 var client = new Discord.Client();
 
-var blacklist = [];
-var blacklistActive = false;
-
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.username}...`);
-
-
-
-})
+client.on("ready", () => {
+  console.log(`Logged in as ${client.user.username}...`);
+});
 
 var cmdmap = {
-    help: cmd_help,
-    say: cmd_say,
-    test: cmd_test,
-    addAce: RageAndAce.cmd_addAce,
-    minusAce: RageAndAce.cmd_minusAce,
-    ace: RageAndAce.cmd_printAce,
-    setAce: RageAndAce.cmd_setAce,
-    addRage: RageAndAce.cmd_addRage,
-    minusRage: RageAndAce.cmd_minusRage,
-    rage: RageAndAce.cmd_printRage,
-    setRage: RageAndAce.cmd_setRage,
-    join: Music.cmd_join,
-    leave: Music.cmd_leave,
-    playRemindTower: Music.cmd_playRemindTower,
-    playJebaited: Music.cmd_playJebaited,
-    stopPlaying: Music.cmd_stopPlaying,
-    playBOOM: Music.cmd_playBOOM,
-    play: MusicURL.cmd_playURL,
-    clearChat: chatCommands.cmd_clearChat,
-    addBlacklist: cmd_AddBacklist,
-    toggleBlacklist: cmd_toggleBlacklist,
-    blacklistInfo: cmd_blacklist
-}
+  help: cmd_help,
+  search_tagesschau: tagesschau.cmd_search,
+};
 
+client.on("message", (msg) => {
+  if (!msg.guild) return;
 
+  var cont = msg.content;
+  var author = msg.member;
+  var chan = msg.channel;
+  var guil = msg.guild;
 
-client.on('message', (msg) => {
+  try {
+    if (author.id != null && client.user.id != null) {
+      if (author.id != client.user.id && cont.startsWith(config.prefix)) {
+        // ::say hello world!
+        var invoke = cont.split(" ")[0].substring(config.prefix.length);
+        var args = cont.split(" ").slice(1);
 
-    if (!msg.guild) return;
-
-    var cont = msg.content;
-    var author = msg.member;
-    var chan = msg.channel;
-    var guil = msg.guild;
-    
-    try{
-
-        if(author.id != null && client.user.id != null){
-
-            if(author.id != client.user.id && cont.startsWith(config.prefix)){
-            
-                // ::say hello world!
-                var invoke = cont.split(" ")[0].substring(config.prefix.length);
-                var args = cont.split(" ").slice(1);
-    
-                if (invoke in cmdmap) {
-                    
-                    if (checkForBlacklist(msg.author)) return Embeds.error(msg.channel, 'You are on the Blacklist!', '');
-
-                    cmdmap[invoke](msg, args);
-                }else{
-                    Embeds.error(msg.channel, "Wrong Invoke!", '');
-                }
-            }
+        if (invoke in cmdmap) {
+          cmdmap[invoke](msg, args);
+        } else {
+          embeds.error(msg.channel, "Wrong Invoke!", "");
         }
-    }   
-    catch(err){
-        catchErr(err, msg);
+      }
     }
-})
+  } catch (err) {
+    catch_err(err, msg);
+  }
+});
 
-
-function cmd_help(msg, args){
-    Embeds.info(msg.channel, "Hello, \n my Prefix is !! and my commands are: \n say, addAce, minusAce, setAce, ace, \n addRage, minusRage, setRage, rage,\nplayRemindTower, playJebaited, stopPlaying", '');
-    //msg.channel.send();
+function catch_err(err, msg) {
+  embeds.error(msg.channel, err, "Error");
+  console.log("ERROR: " + err);
 }
 
+function cmd_help(msg, args, modus) {
+  if (modus == "get_description") return "get a list of all commands";
+  var help_msgs = Object.keys(cmdmap);
 
-function cmd_say(msg, args){
-    msg.channel.send(args.join(' '));
-    
-    msg.delete()
-  .then(msg => console.log(`Deleted message from ${msg.author.username}`))
-  .catch(console.error);
+  var help_msg = "";
+  for (var i = 0; i < help_msgs.length; i++) {
+    if (i != 0) help_msg += "\n";
+    help_msg += help_msgs[i] + ": " + cmdmap[help_msgs[i]](undefined, undefined, "get_description");
+  }
+  embeds.message(msg.channel, help_msg, "");
 }
-
-function cmd_test(msg, args){
-    console.log("test");
-    Embeds.info(msg.channel, "This is a test", '');
-}
-
-
-function catchErr(err, message){/*
-    client.users.get("581755729791418380").send("There was an error at channel " + message.channel + " in guild " + message.guild);
-    client.users.get("581755729791418380").send("ERROR ```" + err + "```");*/
-    console.log("Error(own): " + err);
-
-}
-
-function cmd_AddBacklist(msg, args) {
-
-    if (msg.author.id != '581755729791418380') return Embeds.error(msg.channel, 'You have not enough Permissions to blacklist somebody!', '');
-
-    blacklist.push(args[0]);
-    console.log(blacklist);
-}
-
-function checkForBlacklist(id) {
-
-    if (!blacklistActive) return false;
-
-    for (let i = 0; i < blacklist.length; i++){
-        if (blacklist[i] == id) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function cmd_blacklist(msg, args) {
-    if (blacklistActive) return Embeds.info(msg.channel, 'The blacklist is active with ' + blacklist.length + ' members' + '');
-    if (!blacklistActive) return Embeds.info(msg.channel, 'The blacklist is not active' + '');
-}
-
-function cmd_toggleBlacklist(msg, args) {
-    if (blacklistActive) {
-        Embeds.info(msg.channel, "Deactivated Blacklist!");
-        blacklistActive = false;
-    } else {
-        Embeds.info(msg.channel, "Activated Blacklist!");
-        blacklistActive = true;
-    }
-}
-
-
 
 client.login(config.token);
