@@ -5,7 +5,7 @@ const embed = require("./embed.js");
 module.exports = {
   cmd_search(msg, args, modus) {
     if (modus == "get_description") return "search for the newest tagesschau article with keywords";
-    if (args.length == 0) return embed.error(msg.channel, "You need to specify at least one keyword", "");
+    if (args.length == 0) return embed.error(msg.channel, "You need to specify at least one keyword!", "");
     var requestObj;
     https
       .get("https://www.tagesschau.de/api2/search/?searchText=" + args.join(" ") + "&pageSize=1", (res) => {
@@ -14,13 +14,33 @@ module.exports = {
           //console.log(d);
           requestObj = JSON.parse(d);
           console.log(requestObj);
-          if (requestObj.searchResults[0].type == "video") {
-            embed.message(msg.channel, requestObj.searchResults[0].title + "\nhttps://www.tagesschau.de/multimedia/video/" + requestObj.searchResults[0].sophoraId + "~_parentId-ondemand100.html", "");
-          } else if (requestObj.searchResults[0].type == "story") {
-            embed.message(msg.channel, requestObj.searchResults[0].title + "\n" + requestObj.searchResults[0].detailsweb, "");
-          } else {
-            embed.message(msg.channel, requestObj.searchResults[0].title, "");
+          embed.message(msg.channel, get_string_to_article(requestObj.searchResults[0]), "");
+        });
+      })
+      .on("error", (e) => {
+        console.error(e);
+      });
+  },
+
+  cmd_news(msg, args, modus) {
+    if (modus == "get_description") return "get the 5 newest articles";
+    if (args.length != 0) return embed.error(msg.channel, "This commasnd doesnt need a argument!", "");
+    var requestObj;
+    var requestStr = "";
+    https
+      .get("https://www.tagesschau.de/api2/news/", (res) => {
+        res.setEncoding("utf8");
+        res.on("data", (d) => {
+          requestStr += d;
+        });
+        res.on("end", () => {
+          requestObj = JSON.parse(requestStr);
+          var str = "";
+          for (var i = 0; i < 5; i++) {
+            if (i != 0) str += "\n\n";
+            str += i + 1 + ". " + get_string_to_article(requestObj.news[i]);
           }
+          embed.message(msg.channel, str, "");
         });
       })
       .on("error", (e) => {
@@ -28,3 +48,15 @@ module.exports = {
       });
   },
 };
+
+function get_string_to_article(jsonObject) {
+  if (jsonObject.type == "video") {
+    //return jsonObject.title + "\nhttps://www.tagesschau.de/multimedia/video/" + jsonObject.sophoraId + "~_parentId-ondemand100.html";
+    return "[" + jsonObject.title + "](" + "https://www.tagesschau.de/multimedia/video/" + jsonObject.sophoraId + "~_parentId-ondemand100.html" + ")";
+  } else if (jsonObject.type == "story") {
+    //return jsonObject.title + "\n" + jsonObject.detailsweb;
+    return "[" + jsonObject.title + "](" + jsonObject.detailsweb + ")";
+  } else {
+    return jsonObject.title;
+  }
+}

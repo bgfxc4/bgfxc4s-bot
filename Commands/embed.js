@@ -48,5 +48,18 @@ module.exports = {
     });
     return message;
   },
-};
 
+  message_with_link(chan, label, link, title) {
+    var message;
+    var emb = new Discord.MessageEmbed();
+    emb.setColor(COLORS.green);
+    emb.setDescription("[" + label + "](" + link + ")");
+    if (title) {
+      emb.setTitle(title);
+    }
+    chan.send("", emb).then((m) => {
+      message = m;
+    });
+    return message;
+  },
+};

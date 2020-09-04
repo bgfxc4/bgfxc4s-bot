@@ -3,7 +3,7 @@ const fs = require("fs");
 const { log } = require("util");
 const { error } = require("console");
 
-const embeds = require("./Commands/embed.js");
+const embed = require("./Commands/embed.js");
 const tagesschau = require("./Commands/tagesschau.js");
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
@@ -16,7 +16,8 @@ client.on("ready", () => {
 
 var cmdmap = {
   help: cmd_help,
-  search_tagesschau: tagesschau.cmd_search,
+  tagesschau_search: tagesschau.cmd_search,
+  tagesschau_news: tagesschau.cmd_news,
 };
 
 client.on("message", (msg) => {
@@ -37,7 +38,7 @@ client.on("message", (msg) => {
         if (invoke in cmdmap) {
           cmdmap[invoke](msg, args);
         } else {
-          embeds.error(msg.channel, "Wrong Invoke!", "");
+          embed.error(msg.channel, "Wrong Invoke!", "");
         }
       }
     }
@@ -47,20 +48,21 @@ client.on("message", (msg) => {
 });
 
 function catch_err(err, msg) {
-  embeds.error(msg.channel, err, "Error");
+  embed.error(msg.channel, err, "Error");
   console.log("ERROR: " + err);
 }
 
 function cmd_help(msg, args, modus) {
   if (modus == "get_description") return "get a list of all commands";
-  var help_msgs = Object.keys(cmdmap);
+  if (args.length != 0) return embed.error(msg.channel, "This command doesnt need any arguments!", "");
 
+  var help_msgs = Object.keys(cmdmap);
   var help_msg = "";
   for (var i = 0; i < help_msgs.length; i++) {
     if (i != 0) help_msg += "\n";
     help_msg += help_msgs[i] + ": " + cmdmap[help_msgs[i]](undefined, undefined, "get_description");
   }
-  embeds.message(msg.channel, help_msg, "");
+  embed.message(msg.channel, help_msg, "");
 }
 
 client.login(config.token);
