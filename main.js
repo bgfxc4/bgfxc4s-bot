@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const { log } = require("util");
-const { error } = require("console");
 
 const embed = require("./Commands/embed.js");
 const tagesschau = require("./Commands/tagesschau.js");
@@ -25,8 +23,6 @@ client.on("message", (msg) => {
 
   var cont = msg.content;
   var author = msg.member;
-  var chan = msg.channel;
-  var guil = msg.guild;
 
   try {
     if (author.id != null && client.user.id != null) {
@@ -60,7 +56,7 @@ function cmd_help(msg, args, modus) {
   var help_msg = "";
   for (var i = 0; i < help_msgs.length; i++) {
     if (i != 0) help_msg += "\n";
-    help_msg += help_msgs[i] + ": " + cmdmap[help_msgs[i]](undefined, undefined, "get_description");
+    help_msg += "-" + help_msgs[i] + ": " + cmdmap[help_msgs[i]](undefined, undefined, "get_description");
   }
   embed.message(msg.channel, help_msg, "");
 }

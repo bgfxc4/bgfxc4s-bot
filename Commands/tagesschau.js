@@ -4,17 +4,24 @@ const embed = require("./embed.js");
 
 module.exports = {
   cmd_search(msg, args, modus) {
-    if (modus == "get_description") return "search for the newest tagesschau article with keywords";
+    if (modus == "get_description") return "[keywords] search for the 5 newest tagesschau articles with keywords";
     if (args.length == 0) return embed.error(msg.channel, "You need to specify at least one keyword!", "");
     var requestObj;
+    var requestStr = "";
     https
-      .get("https://www.tagesschau.de/api2/search/?searchText=" + args.join(" ") + "&pageSize=1", (res) => {
+      .get("https://www.tagesschau.de/api2/search/?searchText=" + args.join(" ") + "&pageSize=5", (res) => {
         res.setEncoding("utf8");
         res.on("data", (d) => {
-          //console.log(d);
-          requestObj = JSON.parse(d);
-          console.log(requestObj);
-          embed.message(msg.channel, get_string_to_article(requestObj.searchResults[0]), "");
+          requestStr += d;
+        });
+        res.on("end", () => {
+          requestObj = JSON.parse(requestStr);
+          var str = "";
+          for (var i = 0; i < 5; i++) {
+            if (i != 0) str += "\n\n";
+            str += i + 1 + ". " + get_string_to_article(requestObj.searchResults[i]);
+          }
+          embed.message(msg.channel, str, "");
         });
       })
       .on("error", (e) => {
@@ -24,7 +31,7 @@ module.exports = {
 
   cmd_news(msg, args, modus) {
     if (modus == "get_description") return "get the 5 newest articles";
-    if (args.length != 0) return embed.error(msg.channel, "This commasnd doesnt need a argument!", "");
+    if (args.length != 0) return embed.error(msg.channel, "This command doesnt need a argument!", "");
     var requestObj;
     var requestStr = "";
     https
