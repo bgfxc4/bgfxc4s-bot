@@ -4,7 +4,7 @@ const fs = require("fs");
 const embed = require("./Commands/embed.js");
 const tagesschau = require("./Commands/tagesschau.js");
 
-const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
 var client = new Discord.Client();
 
