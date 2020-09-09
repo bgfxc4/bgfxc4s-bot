@@ -1,4 +1,4 @@
-##bgfxc4s Discord-Bot
+## bgfxc4s Discord-Bot
 
 this is a little experiment by me, testing out the Discord.js library.
 
