@@ -1,6 +1,6 @@
 # Logs
 #
-configs/
+configs/config.json
 
 logs
 *.log
