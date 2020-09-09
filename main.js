@@ -8,6 +8,8 @@ const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
 var client = new Discord.Client();
 
+var servers = [];
+
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.username}...`);
 });
@@ -20,6 +22,19 @@ var cmdmap = {
 
 client.on("message", (msg) => {
   if (!msg.guild) return;
+  if (msg.member.id == client.user.id) return;
+
+  var isInServers = false;
+  for (var i = 0; i < servers.length; i++) {
+    if (servers[i].id == msg.guild.id) isInServers = true;
+  }
+  if (!isInServers) {
+    servers.push({
+      id: msg.guild.id,
+      users: [],
+    });
+  }
+  console.log(servers);
 
   var cont = msg.content;
   var author = msg.member;
