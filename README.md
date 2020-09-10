@@ -7,10 +7,10 @@ You need to add an string "prefix" which is gonna used as prefix, an string "own
 or simply rename the "example_config.json" to "config.json" and edit the parameters.
 It could look like this:
 
-```JSON
+```
 {
-	"token":"YourPrivateToken",
-	"prefix":"!!",
+    "token":"YourPrivateToken",
+    "prefix":"!!",
     "userID":"YourDiscordId"
 }
 ```
