@@ -1,4 +1,5 @@
 {
-  "token": "YourPrivateToken",
-  "prefix": "!!"
+    "token": "YourPrivateToken",
+    "prefix": "!!",
+    "ownerID": "YourDiscordId"
 }
