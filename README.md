@@ -10,6 +10,7 @@ It could look like this:
 ```JSON
 {
 	"token":"YourPrivateToken",
-	"prefix":"!!"
+	"prefix":"!!",
+    "userID":"YourDiscordId"
 }
 ```
