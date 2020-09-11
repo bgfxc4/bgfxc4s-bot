@@ -4,14 +4,14 @@ import * as embed from "./embed";
 import { PermList } from "../permissions";
 
 
-export function cmd_search(msg:Discord.Message, args:Array<String>, modus:String) {
+export function cmd_search(msg:any, args:any, modus:any) {
     if (modus == "get_permission") return PermList.tagesschau;
     if (modus == "get_description") return "[keywords] search for the 5 newest tagesschau articles with keywords";
-    if (args.length == 0) return embed.error(msg.channel, "You need to specify at least one keyword!", "");
+    if (args?.length == 0) return embed.error(msg?.channel, "You need to specify at least one keyword!", "");
     var requestObj:any;
     var requestStr = "";
     https
-        .get("https://www.tagesschau.de/api2/search/?searchText=" + args.join(" ") + "&pageSize=5", (res) => {
+        .get("https://www.tagesschau.de/api2/search/?searchText=" + args?.join(" ") + "&pageSize=5", (res) => {
             res.setEncoding("utf8");
             res.on("data", (d) => {
                 requestStr += d;
@@ -23,7 +23,7 @@ export function cmd_search(msg:Discord.Message, args:Array<String>, modus:String
                     if (i != 0) str += "\n\n";
                     str += i + 1 + ". " + get_string_to_article(requestObj.searchResults[i]);
                 }
-                embed.message(msg.channel, str, "");
+                embed.message(msg?.channel, str, "");
             });
         })
         .on("error", (e) => {
@@ -31,7 +31,7 @@ export function cmd_search(msg:Discord.Message, args:Array<String>, modus:String
         });
 }
 
-export function cmd_news(msg:Discord.Message, args:Array<String>, modus:String) {
+export function cmd_news(msg:any, args:any, modus:any) {
     if (modus == "get_permission") return PermList.tagesschau;
     if (modus == "get_description") return "get the 5 newest articles";
     if (args.length != 0) return embed.error(msg.channel, "This command doesnt need a argument!", "");

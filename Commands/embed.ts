@@ -6,7 +6,7 @@ const COLORS = {
     green: 0x2ecc71,
 };
 
-export function error(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel, cont:String, title:String) {
+export function error(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string) {
     var message:any;
     var emb = new Discord.MessageEmbed();
     emb.setColor(COLORS.red);
@@ -14,13 +14,13 @@ export function error(chan:Discord.TextChannel | Discord.DMChannel | Discord.New
     if (title) {
         emb.setTitle(title);
     }
-    chan.send("", emb).then((m) => {
+    chan?.send("", emb).then((m) => {
         message = m;
     });
     return message;
 }
 
-export function info(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel, cont:String, title:String) {
+export function info(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string) {
     var message:any;
     var emb = new Discord.MessageEmbed();
     emb.setColor(COLORS.yellow);
@@ -28,13 +28,13 @@ export function info(chan:Discord.TextChannel | Discord.DMChannel | Discord.News
     if (title) {
         emb.setTitle(title);
     }
-    chan.send("", emb).then((m) => {
+    chan?.send("", emb).then((m) => {
         message = m;
     });
     return message;
 }
 
-export function message(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel, cont:String, title:String) {
+export function message(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string) {
     var message:any;
     var emb = new Discord.MessageEmbed();
     emb.setColor(COLORS.green);
@@ -42,13 +42,13 @@ export function message(chan:Discord.TextChannel | Discord.DMChannel | Discord.N
     if (title) {
         emb.setTitle(title);
     }
-    chan.send("", emb).then((m) => {
+    chan?.send("", emb).then((m) => {
         message = m;
     });
     return message;
 }
 
-export function message_with_link(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel, label:String, link:String, title:String) {
+export function message_with_link(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, label:string, link:string, title:string) {
     var message:any;
     var emb = new Discord.MessageEmbed();
     emb.setColor(COLORS.green);
@@ -56,7 +56,7 @@ export function message_with_link(chan:Discord.TextChannel | Discord.DMChannel |
     if (title) {
         emb.setTitle(title);
     }
-    chan.send("", emb).then((m) => {
+    chan?.send("", emb).then((m) => {
         message = m;
     });
     return message;
