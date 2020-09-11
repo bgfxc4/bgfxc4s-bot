@@ -1,18 +1,24 @@
-const Discord = require("discord.js");
-const fs = require("fs");
-const perm = require("./permissions");
-const helper = require("./helper");
-
-const cmd_perm = require("./Commands/permissions");
-const embed = require("./Commands/embed.js");
-const tagesschau = require("./Commands/tagesschau.js");
-const { log } = require("util");
+import * as Discord from "discord.js";
+import * as fs from "fs";
+import {PermList} from "./permissions"
+import * as helper from "./helper";
+import * as cmd_perm from "./Commands/permissions";
+import * as embed  from "./Commands/embed";
+import * as tagesschau from "./Commands/tagesschau";
 
 const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
 var client = new Discord.Client();
 
-var servers = [];
+export interface User{
+    id:String,
+    permission:number
+}
+export interface Server{
+    id:String,
+    users:Array<User>
+}
+var servers:Array<Server> = [];
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.username}...`);
@@ -51,12 +57,12 @@ client.on("message", (msg) => {
                         if (msg.member.id == config.ownerID) {
                             servers[serverIndex].users.push({
                                 id: msg.member.id,
-                                permission: perm.list.admin,
+                                permission: PermList.admin,
                             });
                         } else {
                             servers[serverIndex].users.push({
                                 id: msg.member.id,
-                                permission: perm.list.none,
+                                permission: PermList.none,
                             });
                         }
                     }
@@ -76,13 +82,13 @@ client.on("message", (msg) => {
     }
 });
 
-function catch_err(err, msg) {
+function catch_err(err:String, msg:Discord.Message) {
     embed.error(msg.channel, err, "Error");
     console.log("ERROR: " + err);
 }
 
-function cmd_help(msg, args, modus) {
-    if (modus == "get_permission") return perm.list.none;
+function cmd_help(msg:Discord.Message, args:Array<String>, modus:String) {
+    if (modus == "get_permission") return PermList.none;
     if (modus == "get_description") return "get a list of all commands";
     if (args.length != 0) return embed.error(msg.channel, "This command doesnt need any arguments!", "");
 
