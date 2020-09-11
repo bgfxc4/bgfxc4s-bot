@@ -5,7 +5,7 @@ const perm = require("../permissions");
 
 module.exports = {
     cmd_search(msg, args, modus) {
-        if (modus == "get_permission") return perm.tagesschau;
+        if (modus == "get_permission") return perm.list.tagesschau;
         if (modus == "get_description") return "[keywords] search for the 5 newest tagesschau articles with keywords";
         if (args.length == 0) return embed.error(msg.channel, "You need to specify at least one keyword!", "");
         var requestObj;
@@ -32,6 +32,7 @@ module.exports = {
     },
 
     cmd_news(msg, args, modus) {
+        if (modus == "get_permission") return perm.list.tagesschau;
         if (modus == "get_description") return "get the 5 newest articles";
         if (args.length != 0) return embed.error(msg.channel, "This command doesnt need a argument!", "");
         var requestObj;

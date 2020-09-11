@@ -3,8 +3,10 @@ const fs = require("fs");
 const perm = require("./permissions");
 const helper = require("./helper");
 
+const cmd_perm = require("./Commands/permissions");
 const embed = require("./Commands/embed.js");
 const tagesschau = require("./Commands/tagesschau.js");
+const { log } = require("util");
 
 const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
@@ -20,8 +22,8 @@ var cmdmap = {
     help: cmd_help,
     tagesschau_search: tagesschau.cmd_search,
     tagesschau_news: tagesschau.cmd_news,
+    permission_add: cmd_perm.cmd_addPermission,
 };
-
 client.on("message", (msg) => {
     if (!msg.guild) return;
     if (msg.member.id == client.user.id) return;
@@ -46,14 +48,24 @@ client.on("message", (msg) => {
                     var serverIndex = helper.isServerKnown(msg.guild.id, servers);
 
                     if (!helper.isUserKnown(msg.member.id, servers[serverIndex].users)) {
-                        servers[serverIndex].users.push({
-                            id: msg.member.id,
-                            permission: 0,
-                        });
+                        if (msg.member.id == config.ownerID) {
+                            servers[serverIndex].users.push({
+                                id: msg.member.id,
+                                permission: perm.list.admin,
+                            });
+                        } else {
+                            servers[serverIndex].users.push({
+                                id: msg.member.id,
+                                permission: perm.list.none,
+                            });
+                        }
                     }
-                    console.log(servers);
-                    console.log(servers[serverIndex].users);
-                    cmdmap[invoke](msg, args);
+
+                    if (helper.hasPermissions(helper.getUser(msg.member.id, servers[serverIndex]), cmdmap[invoke](undefined, undefined, "get_permission"))) {
+                        cmdmap[invoke](msg, args);
+                    } else {
+                        embed.error(msg.channel, "You dont have the needed Permissions!", "");
+                    }
                 } else {
                     embed.error(msg.channel, "Wrong Invoke!", "");
                 }
@@ -70,7 +82,7 @@ function catch_err(err, msg) {
 }
 
 function cmd_help(msg, args, modus) {
-    if (modus == "get_permission") return perm.none;
+    if (modus == "get_permission") return perm.list.none;
     if (modus == "get_description") return "get a list of all commands";
     if (args.length != 0) return embed.error(msg.channel, "This command doesnt need any arguments!", "");
 
