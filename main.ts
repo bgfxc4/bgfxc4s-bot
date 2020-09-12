@@ -1,12 +1,12 @@
 import * as Discord from "discord.js";
 import * as fs from "fs";
-import { PermList } from "./permissions";
+import * as perm from "./permissions";
 import * as helper from "./helper";
 import * as cmd_perm from "./Commands/permissions";
 import * as embed from "./Commands/embed";
 import * as tagesschau from "./Commands/tagesschau";
 
-const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
+export const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
 var client = new Discord.Client();
 
@@ -24,7 +24,7 @@ interface Command {
     command: any;
 }
 
-var servers: Array<Server> = [];
+export var servers: Array<Server> = [];
 
 client.on("ready", () => {
     console.log("Logged in as " + client.user?.username + "...");
@@ -65,16 +65,16 @@ client.on("message", (msg) => {
                         if (msg.member?.id == config.ownerID) {
                             servers[serverIndex].users.push({
                                 id: msg.member?.id,
-                                permission: PermList.admin,
+                                permission: perm.list.admin,
                             });
                         } else {
                             servers[serverIndex].users.push({
                                 id: msg.member?.id,
-                                permission: PermList.none,
+                                permission: perm.list.none,
                             });
                         }
                     }
-                    if (helper.hasPermissions(helper.getUser(msg.member?.id, servers[serverIndex]), get_cmd(invoke)(undefined, undefined, "get_permission"))) {
+                    if (cmd_perm.hasPermissions(helper.getUser(msg.member?.id, servers[serverIndex]), get_cmd(invoke)(undefined, undefined, "get_permission"))) {
                         get_cmd(invoke)(msg, args, undefined);
                     } else {
                         embed.error(msg.channel, "You dont have the needed Permissions!", "");
@@ -100,7 +100,6 @@ function cmd_exists(invoke: string) {
 }
 
 function get_cmd(invoke: string) {
-    console.log(invoke);
     for (var cmd in cmdmap) {
         if (cmdmap[cmd].invoke == invoke) {
             return cmdmap[cmd].command;
@@ -114,9 +113,10 @@ function catch_err(err: string, msg: Discord.Message) {
     console.log("ERROR: " + err);
 }
 
-function cmd_help(msg: any, args: any, modus: any) {
+function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
+    var base = "Hi, im bgfxc4s bot.\nMy current prefix is " + config.prefix + ". All of my Commands are: \n";
     if (modus == "get_command") return "help";
-    if (modus == "get_permission") return PermList.none;
+    if (modus == "get_permission") return perm.list.none;
     if (modus == "get_description") return "get a list of all commands";
     if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need any arguments!", "");
 
@@ -124,13 +124,12 @@ function cmd_help(msg: any, args: any, modus: any) {
     for (var cmd in cmdmap) {
         help_msgs.push(cmdmap[cmd].invoke);
     }
-    var help_msg = "";
+    var help_msg = base;
     for (var i = 0; i < help_msgs.length; i++) {
         if (i != 0) help_msg += "\n";
-        help_msg += "-" + help_msgs[i] + ": " + get_cmd(help_msgs[i])(undefined, undefined, "get_description");
+        help_msg += "-" + config.prefix + help_msgs[i] + ": " + get_cmd(help_msgs[i])(undefined, undefined, "get_description");
     }
     embed.message(msg?.channel, help_msg, "");
 }
 
 client.login(config.token);
-console.log(get_cmd("help"));
