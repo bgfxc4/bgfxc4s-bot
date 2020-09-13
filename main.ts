@@ -35,6 +35,8 @@ var cmdmap: Array<Command> = [
     { invoke: "tagesschau_search", command: tagesschau.cmd_search },
     { invoke: "tagesschau_news", command: tagesschau.cmd_news },
     { invoke: "permission_add", command: cmd_perm.cmd_addPermission },
+    { invoke: "permission_remove", command: cmd_perm.cmd_removePermission },
+    { invoke: "permission_get", command: cmd_perm.cmd_getPermission },
 ];
 
 client.on("message", (msg) => {
