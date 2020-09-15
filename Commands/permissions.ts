@@ -28,7 +28,7 @@ export function cmd_addPermission(msg: Discord.Message | undefined, args: Array<
     var permission = getPermissionByName(args[1]);
 
     if (permission == perm.list.none) return embed.error(msg.channel, "This Permission cant be added!", "");
-    if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist!", "");
+    if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist! Use permission_list to get a list of all permissions.", "");
     if (hasPermissions(user, permission)) return embed.message(msg.channel, "The user has already the permission.", "");
     if (addPermission(args[0], msg.guild?.id, permission)) {
         embed.message(msg.channel, "Permission " + args[1] + " was given succesfully to the user " + args[0] + ".", "");
@@ -60,7 +60,7 @@ export function cmd_removePermission(msg: Discord.Message | undefined, args: Arr
     var user = helper.getUser(args[0], helper.getServer(msg.guild?.id));
     var permission = getPermissionByName(args[1]);
     if (permission == perm.list.none) return embed.error(msg.channel, "This Permission cant be removed!", "");
-    if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist!", "");
+    if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist! Use permission_list to get a list of all permissions.", "");
     if (!hasPermissions(user, permission)) return embed.error(msg.channel, "The user has not the permission you want to remove.", "");
     if (removePermission(args[0], msg.guild?.id, permission)) {
         embed.message(msg.channel, "Permission " + args[1] + " was succesfully removed from the user " + args[0] + ".", "");
@@ -97,6 +97,19 @@ export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<
         if (hasPermissions(user, allPermissions[i])) answer += Object.keys(perm.list)[i];
     }
     embed.message(msg.channel, "The user " + args[0] + " has the permissions " + answer, "");
+}
+
+export function cmd_permission_list(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: undefined | string) {
+    if (modus == "get_description") return "get a list of all permissions.";
+    if (modus == "get_permission") return perm.list.none;
+
+    var allKeys = Object.keys(perm.list);
+    var str = "";
+    for (var i = 0; i < allKeys.length; i++) {
+        if (i != 0) str += ", ";
+        str += allKeys[i];
+    }
+    embed.message(msg?.channel, "all Permissions: " + str, "");
 }
 
 export function hasPermissions(user: main.User | undefined, permissonToTest: number) {

@@ -37,6 +37,7 @@ var cmdmap: Array<Command> = [
     { invoke: "permission_add", command: cmd_perm.cmd_addPermission },
     { invoke: "permission_remove", command: cmd_perm.cmd_removePermission },
     { invoke: "permission_get", command: cmd_perm.cmd_getPermission },
+    { invoke: "permission_list", command: cmd_perm.cmd_permission_list },
 ];
 
 client.on("message", (msg) => {
