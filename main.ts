@@ -5,6 +5,7 @@ import * as helper from "./helper";
 import * as cmd_perm from "./Commands/permissions";
 import * as embed from "./Commands/embed";
 import * as tagesschau from "./Commands/tagesschau";
+import * as space_launch from "./Commands/space_launch";
 
 export const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
@@ -38,6 +39,10 @@ var cmdmap: Array<Command> = [
     { invoke: "permission_remove", command: cmd_perm.cmd_removePermission },
     { invoke: "permission_get", command: cmd_perm.cmd_getPermission },
     { invoke: "permission_list", command: cmd_perm.cmd_permission_list },
+    { invoke: "spacelaunch_last", command: space_launch.cmd_lastLaunch },
+    { invoke: "spacelaunch_next", command: space_launch.cmd_nextLaunch },
+    { invoke: "spacelaunch_lastSpaceX", command: space_launch.cmd_lastSpaceXLaunch },
+    { invoke: "spacelaunch_nextSpaceX", command: space_launch.cmd_nextSpaceXLaunch },
 ];
 
 client.on("message", (msg) => {
