@@ -34,8 +34,6 @@ interface CommandGroup {
 	commands: Array<Command>;
 }
 
-export var servers: Array<Server> = [];
-
 client.on("ready", () => {
 	setup_mongodb();
     console.log("[Discord.js] Logged in as " + client.user?.username + "...");
@@ -81,33 +79,13 @@ client.on("message", (msg) => {
                 var args = cont.split(" ").slice(1);
 
                 if (cmd_exists(invoke)) {
-                    if (helper.isServerKnown(msg.guild.id, servers) == undefined) {
-                        servers.push({
-                            id: msg.guild.id,
-                            users: [],
-                        });
-                    }
-                    var serverIndex = helper.isServerKnown(msg.guild.id, servers);
-                    if (!serverIndex) serverIndex = 0;
-
-                    if (!helper.isUserKnown(msg.member?.id, servers[serverIndex].users)) {
-                        if (msg.member?.id == config.ownerID) {
-                            servers[serverIndex].users.push({
-                                id: msg.member?.id,
-                                permission: perm.list.admin,
-                            });
-                        } else {
-                            servers[serverIndex].users.push({
-                                id: msg.member?.id,
-                                permission: perm.list.none,
-                            });
-                        }
-                    }
-                    if (cmd_perm.hasPermissions(helper.getUser(msg.member?.id, servers[serverIndex]), get_cmd(invoke)(undefined, undefined, "get_permission"))) {
-                        get_cmd(invoke)(msg, args, undefined);
-                    } else {
-                        embed.error(msg.channel, "You dont have the needed Permissions!", "");
-                    }
+					check_server_and_user(msg, args, invoke, (user) => {
+						if (cmd_perm.hasPermissions(user, get_cmd(invoke)(undefined, undefined, "get_permission"))) {
+							get_cmd(invoke)(msg, args, undefined);
+						} else {
+							embed.error(msg.channel, "You dont have the required Permissions!", "");
+						}
+					});
                 } else {
                     embed.error(msg.channel, "Wrong Invoke!", "");
                 }
@@ -161,10 +139,48 @@ function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefi
 		help_msg += "\n**" + cmdmap[cmd_group].name  + "**:\n";
 		for (var i = 0; i < help_msgs.length; i++) {
 			if (i != 0) help_msg += "\n";
-			help_msg += "-" + config.prefix + help_msgs[i] + ": " + get_cmd(help_msgs[i])(undefined, undefined, "get_description");
+			help_msg += "\u27A4 " + config.prefix + help_msgs[i] + ": " + get_cmd(help_msgs[i])(undefined, undefined, "get_description");
 		}
 	}
     embed.message(msg?.channel, help_msg, "");
+}
+
+function check_server_and_user(msg: Discord.Message, args: Array<string>, invoke: string, callback: (user: User | undefined) => void) {
+	helper.isServerKnown(msg.guild?.id, (found) => {
+		if (!found) {
+			helper.add_server_to_db(msg.guild?.id, () => {
+				after_callback();
+				return;
+			});
+		} else {
+			after_callback();
+		}
+		function after_callback() {
+			helper.isUserKnown(msg.member?.id, msg.guild?.id, (found_user) => {
+				if (!found_user) {
+					if (msg.member?.id == config.ownerID) {
+						helper.add_new_user_to_db(msg.member?.id, perm.list.admin, msg.guild?.id, () => {
+							helper.getUser(msg.member?.id, msg.guild?.id, (user) => {
+								callback(user);
+								return;
+							});
+						});
+					} else {
+						helper.add_new_user_to_db(msg.member?.id, perm.list.none, msg.guild?.id, () => {
+							helper.getUser(msg.member?.id, msg.guild?.id, (user) => {
+								callback(user);
+								return;
+							});
+						});
+					}
+				} else {
+					helper.getUser(msg.member?.id, msg.guild?.id, (user) => {
+						callback(user);
+					});
+				}
+			});
+		}
+	});
 }
 
 function setup_mongodb() {
