@@ -38,7 +38,7 @@ export var servers: Array<Server> = [];
 
 client.on("ready", () => {
 	setup_mongodb();
-    console.log("Logged in as " + client.user?.username + "...");
+    console.log("[Discord.js] Logged in as " + client.user?.username + "...");
 });
 
 var cmdmap: Array<CommandGroup> = [
@@ -168,8 +168,9 @@ function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefi
 }
 
 function setup_mongodb() {
-	MongoClient.connect(config.mongo_url, function (err, client) {
+	MongoClient.connect(config.mongo_url, {useNewUrlParser: true, useUnifiedTopology: true}).then(client => {
 		db = client.db("bgfxc4s-bot");
+		console.log("[Database] connected succesfully to database!");
 	});	
 }
 

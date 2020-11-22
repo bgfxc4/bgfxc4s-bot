@@ -11,6 +11,6 @@ It could look like this:
     "token":"YourPrivateToken",
     "prefix":"!!",
     "userID":"YourDiscordId",
-	"mongo_url": "mongodb://localhpst:27017"
+	"mongo_url": "mongodb://localhost:27017"
 }
 ```
