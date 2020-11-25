@@ -6,79 +6,86 @@ import * as helper from "../helper";
 
 export function cmd_addPermission(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
     if (modus == "get_description") return "[userID, name of permission to add] add permission to other users.";
-    if (modus == "get_permission") return perm.list.managePermissions;
+    if (modus == "get_permission") return perm.list.manage_permissions;
     if (msg == undefined) return;
     if (args == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [userID, name of permission to add]!", "");
 
-    if (!isUserOnServer(msg?.guild, args[0])) return embed.error(msg.channel, "The user with the ID " + args[0] + " is not on this server!", "");
-    helper.isUserKnown(args[0], msg.guild?.id, (found) => {
-		if (!found) {
-			if (args[0] == main.config.ownerID) {
-				helper.add_new_user_to_db(args[0], perm.list.admin, msg.guild?.id, () => {
-					add_permission_action(msg, args);
-					return;
-				});
-			} else { 
-				helper.add_new_user_to_db(args[0], perm.list.none, msg.guild?.id, () => {
-					add_permission_action(msg, args);
-					return;
-				});
-			}
-		}
-		add_permission_action(msg, args);
-		function add_permission_action(msg: Discord.Message, args: Array<string>) {
-			helper.getUser(args[0], msg.guild?.id, (user => {
-				var permission = getPermissionByName(args[1]);
-				if (permission == perm.list.none) return embed.error(msg.channel, "This Permission cant be added!", "");
-				if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist! Use permission_list to get a list of all permissions.", "");
-				if (hasPermissions(user, permission)) return embed.message(msg.channel, "The user has already the permission.", "");
-				if (addPermission(args[0], msg.guild?.id, permission)) {
-					embed.message(msg.channel, "Permission " + args[1] + " was given succesfully to the user " + args[0] + ".", "");
-				} else {
-					embed.error(msg.channel, "Something went wrong!", "");
+	isUserOnServer(msg?.guild, args[0], (ret) => {
+		if (!ret) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
+		helper.isUserKnown(args[0], msg.guild?.id, (found) => {
+			if (!found) {
+				if (args[0] == main.config.ownerID) {
+					helper.add_new_user_to_db(args[0], perm.list.admin, msg.guild?.id, () => {
+						add_permission_action(msg, args);
+						return;
+					});
+				} else { 
+					helper.add_new_user_to_db(args[0], perm.list.none, msg.guild?.id, () => {
+						add_permission_action(msg, args);
+						return;
+					});
 				}
-			}));
-		}
+			}
+			add_permission_action(msg, args);
+			function add_permission_action(msg: Discord.Message, args: Array<string>) {
+				helper.getUser(args[0], msg.guild?.id, (user => {
+					var permission = getPermissionByName(args[1]);
+					if (permission == perm.list.none) return embed.error(msg.channel, "This Permission cant be added!", "");
+					if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist! Use permission_list to get a list of all permissions.", "");
+					if (hasPermissions(user, permission)) return embed.message(msg.channel, "The user has already the permission.", "");
+					if (addPermission(args[0], msg.guild?.id, permission)) {
+						embed.message(msg.channel, "Permission " + args[1] + " was given succesfully to the user " + args[0] + ".", "");
+					} else {
+						embed.error(msg.channel, "Something went wrong!", "");
+					}
+				}));
+			}
+		});
 	});
 }
 
 
 export function cmd_removePermission(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
     if (modus == "get_description") return "[userID, name of permission to remove] remove a permission from other users.";
-    if (modus == "get_permission") return perm.list.managePermissions;
+    if (modus == "get_permission") return perm.list.manage_permissions;
     if (msg == undefined) return;
     if (args == undefined || args[0] == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [userID, name of permission to remove]!", "");
 
-    if (!isUserOnServer(msg?.guild, args[0])) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
-    helper.isUserKnown(args[0], msg.guild?.id, (found) => {
-		if (!found) {
-			if (args[0] == main.config.ownerID) {
-				helper.add_new_user_to_db(args[0], perm.list.admin, msg.guild?.id, () => {
-					remove_permission_action(msg, args);
-					return;
-				});
-			} else { 
-				helper.add_new_user_to_db(args[0], perm.list.none, msg.guild?.id, () => {
-					remove_permission_action(msg, args);
-					return;
+	isUserOnServer(msg?.guild, args[0], (ret) => {
+		if (!ret) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
+		helper.isUserKnown(args[0], msg.guild?.id, (found) => {
+			if (!found) {
+				if (args[0] == main.config.ownerID) {
+					helper.add_new_user_to_db(args[0], perm.list.admin, msg.guild?.id, () => {
+						remove_permission_action(msg, args);
+						return;
+					});
+				} else { 
+					helper.add_new_user_to_db(args[0], perm.list.none, msg.guild?.id, () => {
+						remove_permission_action(msg, args);
+						return;
+					});
+				}
+			}
+			remove_permission_action(msg, args);
+			function remove_permission_action(msg: Discord.Message, args: Array<string>) {
+				helper.getUser(args[0], msg.guild?.id, (user) => {
+					var permission = getPermissionByName(args[1]);
+					if (permission == perm.list.none) return embed.error(msg.channel, "This Permission cant be removed!", "");
+					if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist! Use permission_list to get a list of all permissions.", "");
+					if (!hasPermissions(user, permission)) return embed.error(msg.channel, "The user has not the permission you want to remove.", "");
+					removePermission(args[0], msg.guild?.id, permission, (ret => {
+						if (ret) {
+							embed.message(msg.channel, "Permission " + args[1] + " was succesfully removed from the user " + args[0] + ".", "");
+						} else {
+							embed.error(msg.channel, "Something went wrong!", "");
+						}
+					}));
 				});
 			}
-		}
-		remove_permission_action(msg, args);
-		function remove_permission_action(msg: Discord.Message, args: Array<string>) {
-			helper.getUser(args[0], msg.guild?.id, (user) => {
-				var permission = getPermissionByName(args[1]);
-				if (permission == perm.list.none) return embed.error(msg.channel, "This Permission cant be removed!", "");
-				if (permission == undefined) return embed.error(msg.channel, "The permission " + args[1] + " doesnt exist! Use permission_list to get a list of all permissions.", "");
-				if (!hasPermissions(user, permission)) return embed.error(msg.channel, "The user has not the permission you want to remove.", "");
-				if (removePermission(args[0], msg.guild?.id, permission)) {
-					embed.message(msg.channel, "Permission " + args[1] + " was succesfully removed from the user " + args[0] + ".", "");
-				} else {
-					embed.error(msg.channel, "Something went wrong!", "");
-				}
-			});
-		}
+		});
 	});
+
 }
 
 
@@ -87,34 +94,37 @@ export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<
     if (modus == "get_permission") return perm.list.none;
     if (msg == undefined) return;
     if (args == undefined || args[0] == undefined || args.length != 1) return embed.error(msg.channel, "You need to specify one arguments [userID]!", "");
-    if (!isUserOnServer(msg?.guild, args[0])) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
-    helper.isUserKnown(args[0], msg.guild?.id, (found) => {
-		if (!found) {
-			if (args[0] == main.config.ownerID) {
-				helper.add_new_user_to_db(args[0], perm.list.admin, msg.guild?.id, () => {
-					get_permission_action(msg, args);
-					return;
-				});
-			} else { 
-				helper.add_new_user_to_db(args[0], perm.list.none, msg.guild?.id, () => {
-					get_permission_action(msg, args);
-					return;
+
+	isUserOnServer(msg?.guild, args[0], (ret) => {
+		if (!ret) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
+		helper.isUserKnown(args[0], msg.guild?.id, (found) => {
+			if (!found) {
+				if (args[0] == main.config.ownerID) {
+					helper.add_new_user_to_db(args[0], perm.list.admin, msg.guild?.id, () => {
+						get_permission_action(msg, args);
+						return;
+					});
+				} else { 
+					helper.add_new_user_to_db(args[0], perm.list.none, msg.guild?.id, () => {
+						get_permission_action(msg, args);
+						return;
+					});
+				}
+			}
+			get_permission_action(msg, args);
+			function get_permission_action(msg: Discord.Message, args: Array<string>) {
+				helper.getUser(args[0], msg.guild?.id, (user) => {
+					if (user == undefined) return embed.error(msg.channel, "You need to specify one arguments [userID]!", "");
+					var allPermissions: Array<number> = Object.values(perm.list);
+					var answer = "";
+					for (var i = 0; i < allPermissions.length; i++) {
+						if (i != 0) answer += ", ";
+						if (hasPermissions(user, allPermissions[i])) answer += Object.keys(perm.list)[i];
+					}
+					embed.message(msg.channel, "The user " + args[0] + " has the permissions " + answer, "");
 				});
 			}
-		}
-		get_permission_action(msg, args);
-		function get_permission_action(msg: Discord.Message, args: Array<string>) {
-			helper.getUser(args[0], msg.guild?.id, (user) => {
-				if (user == undefined) return embed.error(msg.channel, "You need to specify one arguments [userID]!", "");
-				var allPermissions: Array<number> = Object.values(perm.list);
-				var answer = "";
-				for (var i = 0; i < allPermissions.length; i++) {
-					if (i != 0) answer += ", ";
-					if (hasPermissions(user, allPermissions[i])) answer += Object.keys(perm.list)[i];
-				}
-				embed.message(msg.channel, "The user " + args[0] + " has the permissions " + answer, "");
-			});
-		}
+		});
 	});
 }
 
@@ -169,7 +179,7 @@ function addPermission(user_id: string, server_id: string | undefined, permissio
 	return true;
 }
 
-function removePermission(user_id: string, server_id: string | undefined, permission_to_remove: number) {
+function removePermission(user_id: string, server_id: string | undefined, permission_to_remove: number, callback: (ret: boolean) => void) {
 	var query = { id: server_id}
 	main.db.collection("servers").findOne(query, (err, res) => {
 		if(err) throw err;
@@ -180,21 +190,27 @@ function removePermission(user_id: string, server_id: string | undefined, permis
 				continue;
 			}
 		}
-		if (!user_to_add_perm) return false;
+		if (!user_to_add_perm) {
+			callback(false);
+			return;
+		}
 		res.users[user_to_add_perm].permission = res.users[user_to_add_perm].permission ^ permission_to_remove;
 		var to_update = { $set: { users: res.users } };
 		main.db.collection("servers").updateOne(query, to_update, (err, res) => {
 			if(err) throw err;
 			console.log("[Database] updated one permission");	
+			callback(true);
+			return;
 		});
 	});
-	return true;
 }
 
-function isUserOnServer(guild: Discord.Guild | null, userID: string) {
-    if (guild?.member(userID)) {
-        return true;
-    } else {
-        return false;
-    }
+function isUserOnServer(guild: Discord.Guild | null, user_id: string, callback: (ret: boolean) => void) {
+	guild?.members.fetch(user_id).then((member) => { 
+		callback(true);
+		return;
+	}).catch((reason) => { 
+		callback(false);
+		return;
+	});
 }

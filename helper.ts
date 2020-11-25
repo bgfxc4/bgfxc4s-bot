@@ -15,7 +15,7 @@ export function isServerKnown(server_id: string | undefined, callback: (found: b
 }
 
 export function add_server_to_db(server_id: string | undefined, callback: () => void) {
-	var to_add = { id: server_id, users: []};
+	var to_add = { id: server_id, users: [], roles_to_manage: []};
 	main.db.collection("servers").insertOne(to_add, (err, res) => {
 		if (err) throw err;
 		console.log("[Database] added new Server to database");

@@ -19,9 +19,16 @@ export interface User {
     id: string | undefined;
     permission: number;
 }
+
+export interface Role {
+	id: number;
+	name: string;
+}
+
 export interface Server {
     id: string;
     users: Array<User>;
+	roles_to_manage: Array<Role>
 }
 
 interface Command {
@@ -60,7 +67,11 @@ var cmdmap: Array<CommandGroup> = [
 		{ invoke: "spacelaunch_nextSpaceX", command: space_launch.cmd_nextSpaceXLaunch },
 	]},
 	{ name: "Roles", commands: [
-		{ invoke: "give_role_self", command: roles.cmd_giveRoleSelf }
+		{ invoke: "give_role_self", command: roles.cmd_giveRoleSelf },
+		{ invoke: "remove_role_self", command: roles.cmd_removeRoleSelf },
+		{ invoke: "list_roles", command: roles.cmd_list_roles },
+		{ invoke: "add_managed_role", command: roles.cmd_addManagedRole },
+		{ invoke: "remove_managed_role", command: roles.cmd_removeManagedRole }
 	]}
 ];
 
@@ -74,7 +85,6 @@ client.on("message", (msg) => {
     try {
         if (author?.id != null && client.user?.id != null) {
             if (author.id != client.user.id && cont.startsWith(config.prefix)) {
-                // ::say hello world!
                 var invoke = cont.split(" ")[0].substring(config.prefix.length);
                 var args = cont.split(" ").slice(1);
 
