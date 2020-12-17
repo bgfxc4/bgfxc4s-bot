@@ -5,4 +5,5 @@ export const list = {
     manage_permissions: 4,
 	manage_roles: 8,
     admin: 16,
+	manage_channels: 32
 };

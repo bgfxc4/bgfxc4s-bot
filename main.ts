@@ -8,6 +8,7 @@ import * as embed from "./Commands/embed";
 import * as tagesschau from "./Commands/tagesschau";
 import * as space_launch from "./Commands/space_launch";
 import * as roles from "./Commands/roles";
+import * as channels from "./Commands/channel"
 
 export const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
@@ -72,6 +73,9 @@ var cmdmap: Array<CommandGroup> = [
 		{ invoke: "list_roles", command: roles.cmd_list_roles },
 		{ invoke: "add_managed_role", command: roles.cmd_addManagedRole },
 		{ invoke: "remove_managed_role", command: roles.cmd_removeManagedRole }
+	]},
+	{ name: "Channels", commands: [
+		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel }
 	]}
 ];
 
