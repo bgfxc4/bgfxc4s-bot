@@ -26,6 +26,7 @@ export function cmd_move_all_to_other_channel(msg: Discord.Message | undefined, 
 		for (var k in channels[0].members.array()) {
 			channels[0].members.array()[k].edit({ channel: channels[1] })
 		}
+		return embed.message(msg.channel, `Succesfully moved all users from ${args[0]} to ${args[1]}.`, "")
 	} catch {
 		return embed.error(msg.channel, "Someting went wrong, please contact the supporter", "")
 	}
