@@ -1,7 +1,6 @@
 import * as perm from "../permissions";
 import * as Discord from "discord.js";
 import * as embed from "./embed";
-import {checkServerIdentity} from "tls";
 
 export function cmd_move_all_to_other_channel(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
     if (modus == "get_description") return "[Id of Source Channel, Id of Destination Channel] Move all users from the Source Channel to the Destination Channel.";

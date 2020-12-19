@@ -9,6 +9,7 @@ import * as tagesschau from "./Commands/tagesschau";
 import * as space_launch from "./Commands/space_launch";
 import * as roles from "./Commands/roles";
 import * as channels from "./Commands/channel"
+import * as debug from "./Commands/debug"
 
 export const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
 
@@ -35,11 +36,13 @@ export interface Server {
 interface Command {
     invoke: string;
     command: any;
+	show_on_list?: boolean
 }
 
 interface CommandGroup {
 	name: string;
 	commands: Array<Command>;
+	show_on_list?: boolean
 }
 
 client.on("ready", () => {
@@ -77,7 +80,10 @@ var cmdmap: Array<CommandGroup> = [
 	{ name: "Channels", commands: [
 		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel },
 		/*{ invoke: "swap_channels", command: channels.cmd_swap_two_channels }*/
-	]}
+	]},
+	{ name: "Debug", commands: [
+		{ invoke: "get_pid", command: debug.cmd_get_pid, show_on_list: false },	
+	], show_on_list: false}
 ];
 
 client.on("message", (msg) => {
@@ -147,8 +153,10 @@ function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefi
 	
 	var help_msg = base;
 	for (var cmd_group in cmdmap) {
+		if (cmdmap[cmd_group].show_on_list === false) continue
 		var help_msgs: Array<string> = [];
 		for (var cmd in cmdmap[cmd_group].commands) {
+			if (cmdmap[cmd_group].commands[cmd].show_on_list === false) continue; 
 			help_msgs.push(cmdmap[cmd_group].commands[cmd].invoke);
 		}
 		help_msg += "\n**" + cmdmap[cmd_group].name  + "**:\n";
