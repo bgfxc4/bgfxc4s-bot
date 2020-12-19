@@ -75,7 +75,8 @@ var cmdmap: Array<CommandGroup> = [
 		{ invoke: "remove_managed_role", command: roles.cmd_removeManagedRole }
 	]},
 	{ name: "Channels", commands: [
-		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel }
+		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel },
+		/*{ invoke: "swap_channels", command: channels.cmd_swap_two_channels }*/
 	]}
 ];
 
@@ -101,7 +102,7 @@ client.on("message", (msg) => {
 						}
 					});
                 } else {
-                    embed.error(msg.channel, "Wrong Invoke!", "");
+                    embed.error(msg.channel, `The command \`${invoke}\` does not exist!`, "");
                 }
             }
         }
