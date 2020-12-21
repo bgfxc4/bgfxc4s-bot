@@ -1,9 +1,9 @@
 export const list = {
     none: 0,
-    tagesschau: 1,
-    space_launch: 2,
-    manage_permissions: 4,
-	manage_roles: 8,
-    admin: 16,
+    admin: 1,
+    tagesschau: 2,
+    space_launch: 4,
+    manage_permissions: 8,
+	manage_roles: 16,
 	manage_channels: 32
 };

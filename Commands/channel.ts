@@ -67,3 +67,42 @@ export function cmd_swap_two_channels(msg: Discord.Message | undefined, args: Ar
 		return embed.error(msg.channel, "Something went wrong, please contact the supporter", "")
 	}
 }
+
+export function cmd_move_user(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
+    if (modus == "get_description") return "[Id of user, Id of channel] Move a user to a channel.";
+    if (modus == "get_permission") return perm.list.manage_channels
+    if (msg == undefined) return;
+	if (args == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [Id of user, Id of channel]!", "");
+	try {	
+		var channel_arr = msg.guild?.channels.cache.array()
+		var found = false;
+		if (!channel_arr) return;
+		for (var i = 0; i < channel_arr.length; i ++) {
+			if (channel_arr[i].id == args[1] && channel_arr[i].type == "voice") {
+				found = true
+			}
+		}
+
+		if (!found) {
+			return embed.error(msg.channel, `There is no voice channel with the id \`${args[1]}\`!`, "");	
+		}
+
+		var users_arr = msg.guild?.members.cache.array()
+		
+		found = false
+		if (!users_arr) return;
+		for (var i = 0; i < users_arr.length; i ++) {
+			if (users_arr[i].id == args[0]) {
+				found = true
+				users_arr[i].edit({ channel: args[1] }).then(() => {
+					return embed.message(msg.channel, `The user was succesfully moved.`, "")
+				})
+			}
+		}
+		if (!found)
+			return embed.error(msg.channel, `There is no user with the id \`${args[0]}\`!`, "");	
+		
+	} catch {
+		return embed.error(msg.channel, "Something went wrong, please contact the supporter", "")
+	}
+}

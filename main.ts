@@ -79,6 +79,7 @@ var cmdmap: Array<CommandGroup> = [
 	]},
 	{ name: "Channels", commands: [
 		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel },
+		{ invoke: "move_user", command: channels.cmd_move_user }
 		/*{ invoke: "swap_channels", command: channels.cmd_swap_two_channels }*/
 	]},
 	{ name: "Debug", commands: [
