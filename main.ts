@@ -15,7 +15,7 @@ export const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"
 
 export var db: Db; 
 
-var client = new Discord.Client();
+export var client = new Discord.Client();
 
 export interface User {
     id: string | undefined;
@@ -75,7 +75,9 @@ var cmdmap: Array<CommandGroup> = [
 		{ invoke: "remove_role_self", command: roles.cmd_removeRoleSelf },
 		{ invoke: "list_roles", command: roles.cmd_list_roles },
 		{ invoke: "add_managed_role", command: roles.cmd_addManagedRole },
-		{ invoke: "remove_managed_role", command: roles.cmd_removeManagedRole }
+		{ invoke: "remove_managed_role", command: roles.cmd_removeManagedRole },
+		{ invoke: "give_role", command: roles.cmd_giveRole },
+		{ invoke: "remove_role", command: roles.cmd_removeRole }
 	]},
 	{ name: "Channels", commands: [
 		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel },
@@ -83,7 +85,8 @@ var cmdmap: Array<CommandGroup> = [
 		/*{ invoke: "swap_channels", command: channels.cmd_swap_two_channels }*/
 	]},
 	{ name: "Debug", commands: [
-		{ invoke: "get_pid", command: debug.cmd_get_pid, show_on_list: false },	
+		{ invoke: "get_pid", command: debug.cmd_get_pid, show_on_list: false },
+		{ invoke: "tmp_cmd", command: debug.cmd_temp_cmd, show_on_list: false }
 	], show_on_list: false}
 ];
 

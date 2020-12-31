@@ -17,11 +17,15 @@ export function cmd_giveRoleSelf(msg: Discord.Message | undefined, args: Array<s
 			if (res.roles_to_manage[i].name == args[0]) {
 				var role = msg.guild?.roles.cache.find(role => role.name == res.roles_to_manage[i].name);
 				if (role != undefined)  {
-					msg.member?.roles.add(role);
+					msg.member?.roles.add(role).then(() => {
+						return embed.message(msg.channel, `The role ${args[0]} was succesfully given to you.`, "");
+					}).catch((err) => {
+							embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+					}) 
 				} else {
 					return embed.error(msg.channel, `The role ${args[0]} does not exist anymore on this server! Pleas delete it out of my list with \`${main.config.prefix}remove_managed_role\``, "");
 				}
-				return embed.message(msg.channel, `The role ${args[0]} was succesfully given to you.`, "");
+				return 			
 			}
 		}
 		return embed.error(msg.channel, `I cant manage the role ${args[0]}!`, "");
@@ -44,8 +48,12 @@ export function cmd_removeRoleSelf(msg: Discord.Message | undefined, args: Array
 				if (role != undefined)  {
 					var has_role = msg.member?.roles.cache.each(role => role.name == args[0]);
 					if (has_role != undefined) {
-						msg.member?.roles.remove(role.id);
-						return embed.message(msg.channel, `The role ${args[0]} was succesfully removed from you.`, "");
+						msg.member?.roles.remove(role.id).then(() => {
+							return embed.message(msg.channel, `The role ${args[0]} was succesfully removed from you.`, "");
+						}).catch((err) => {
+							embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+						}) 
+						return
 					} else {
 						return  embed.error(msg.channel, `You dont have the role ${args[0]}.`, "");
 					}
@@ -135,4 +143,62 @@ export function cmd_removeManagedRole(msg: Discord.Message | undefined, args: Ar
 	});
 }
 
+export function cmd_giveRole(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
+    if (modus == "get_description") return "[Role id, id of user] give somebody a role.";
+    if (modus == "get_permission") return perm.list.admin;
+    if (msg == undefined) return;
+    if (args == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [Role id, id of user]!", "");
 
+	var users = msg.guild?.members.cache.array()
+	if (!users) return;
+	for (var i in users) {
+		if (users[i].id == args[1]) {
+			var roles = msg.guild?.roles.cache.array()
+			if (!roles) return;
+			for (var j in roles) {
+				if (roles[j].id == args[0]) {
+					var username = users[i].displayName
+					var rolename = roles[j].name
+					users[i].roles.add(roles[j].id).then(() => {
+						return embed.message(msg.channel, `The role \`${rolename}\` was succesfully given to the user \`${username}\`.`, "")
+					}).catch((err) => {
+						embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+					}) 
+					return
+				}
+			}
+			return embed.error(msg.channel, `There is no role with the id \`${args[0]}\` on this server.`, "")
+		}
+	}
+	return embed.error(msg.channel, `There is no user with the id \`${args[1]}\` on this server.`, "")
+}
+
+export function cmd_removeRole(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
+    if (modus == "get_description") return "[Role id, id of user] remoe a role from somebody.";
+    if (modus == "get_permission") return perm.list.admin;
+    if (msg == undefined) return;
+    if (args == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [Role id, id of user]!", "");
+	
+	var users = msg.guild?.members.cache.array()
+	if (!users) return
+	for (var i in users) {
+		if (users[i].id == args[1]) {
+			var roles = users[i].roles.cache.array()
+			if (!roles) return embed.error(msg.channel, `The user with the id \`${args[1]}\` has no roles on this server!`, "")
+			for (var j in roles) {
+				if (roles[j].id == args[0]) {
+					var username = users[i].displayName
+					var rolename = roles[j].name
+					users[i].roles.remove(roles[j].id).then(() => {
+						return embed.message(msg.channel, `The role \`${rolename}\` was succesfully removed from the user \`${username}\`.`, "")
+					}).catch((err) => {
+						embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+					}) 
+					return
+				}
+			}
+			return embed.error(msg.channel, `There is no role with the id \`${args[1]}\` on this server.`, "")
+		}
+	}
+	return embed.error(msg.channel, `There is no user with the id \`${args[1]}\` on this server.`, "")
+}
