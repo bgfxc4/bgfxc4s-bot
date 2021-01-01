@@ -118,8 +118,10 @@ export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<
 					var allPermissions: Array<number> = Object.values(perm.list);
 					var answer = "";
 					for (var i = 0; i < allPermissions.length; i++) {
-						if (i != 0) answer += ", ";
-						if (hasPermissions(user, allPermissions[i])) answer += Object.keys(perm.list)[i];
+						if (hasPermissions(user, allPermissions[i])) {
+							if (i != 0) answer += ", ";
+							answer += Object.keys(perm.list)[i];
+						}			
 					}
 					embed.message(msg.channel, "The user " + args[0] + " has the permissions " + answer, "");
 				});
