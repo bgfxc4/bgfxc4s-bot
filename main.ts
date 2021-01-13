@@ -9,6 +9,7 @@ import * as tagesschau from "./Commands/tagesschau";
 import * as space_launch from "./Commands/space_launch";
 import * as roles from "./Commands/roles";
 import * as channels from "./Commands/channel"
+import * as useless_stuff from "./Commands/useless_stuff"
 import * as debug from "./Commands/debug"
 
 export const config = JSON.parse(fs.readFileSync("./configs/config.json", "utf8"));
@@ -82,7 +83,9 @@ var cmdmap: Array<CommandGroup> = [
 	{ name: "Channels", commands: [
 		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel },
 		{ invoke: "move_user", command: channels.cmd_move_user }
-		/*{ invoke: "swap_channels", command: channels.cmd_swap_two_channels }*/
+	]},
+	{ name: "Useles stuff", commands: [
+		{ invoke: "i_feel_awesome", command: useless_stuff.cmd_IFeelAwesome}
 	]},
 	{ name: "Debug", commands: [
 		{ invoke: "get_pid", command: debug.cmd_get_pid, show_on_list: false },

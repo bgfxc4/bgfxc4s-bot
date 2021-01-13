@@ -94,7 +94,7 @@ export function cmd_addManagedRole(msg: Discord.Message | undefined, args: Array
     if (args == undefined || args.length != 1) return embed.error(msg.channel, "You need to specify one argument [Role name]!", "");
 	var role = msg.guild?.roles.cache.find(role => role.name == args[0]);
 	if (role == undefined) {
-		return embed.error(msg.channel, `There is no role named \`${args[0]}\`.`, "");
+		return embed.error(msg.channel, `There is no role named \`${args[0]}\`.\n Tipp: you have to create the role manually and then add it to my managed roles.`, "");
 	} else {
 		var query = { id: msg.guild?.id }
 		main.db.collection("servers").findOne(query, (err, res) => {
