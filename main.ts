@@ -146,7 +146,7 @@ function get_cmd(invoke: string) {
     return cmdmap[0].commands[0].command;
 }
 
-function catch_err(err: string, msg: Discord.Message) {
+export function catch_err(err: string, msg: Discord.Message) {
     embed.error(msg.channel, err, "Error");
     console.log("ERROR: " + err);
 }

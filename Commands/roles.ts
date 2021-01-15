@@ -20,7 +20,8 @@ export function cmd_giveRoleSelf(msg: Discord.Message | undefined, args: Array<s
 					msg.member?.roles.add(role).then(() => {
 						return embed.message(msg.channel, `The role ${args[0]} was succesfully given to you.`, "");
 					}).catch((err) => {
-							embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+							main.catch_err(err, msg)
+							return
 					}) 
 				} else {
 					return embed.error(msg.channel, `The role ${args[0]} does not exist anymore on this server! Pleas delete it out of my list with \`${main.config.prefix}remove_managed_role\``, "");
@@ -51,7 +52,8 @@ export function cmd_removeRoleSelf(msg: Discord.Message | undefined, args: Array
 						msg.member?.roles.remove(role.id).then(() => {
 							return embed.message(msg.channel, `The role ${args[0]} was succesfully removed from you.`, "");
 						}).catch((err) => {
-							embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+							main.catch_err(err, msg)
+							return
 						}) 
 						return
 					} else {
@@ -162,7 +164,8 @@ export function cmd_giveRole(msg: Discord.Message | undefined, args: Array<strin
 					users[i].roles.add(roles[j].id).then(() => {
 						return embed.message(msg.channel, `The role \`${rolename}\` was succesfully given to the user \`${username}\`.`, "")
 					}).catch((err) => {
-						embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+						main.catch_err(err, msg)
+						return
 					}) 
 					return
 				}
@@ -192,7 +195,8 @@ export function cmd_removeRole(msg: Discord.Message | undefined, args: Array<str
 					users[i].roles.remove(roles[j].id).then(() => {
 						return embed.message(msg.channel, `The role \`${rolename}\` was succesfully removed from the user \`${username}\`.`, "")
 					}).catch((err) => {
-						embed.error(msg.channel, `Someting went wrong, please contact the supporter. Error message: \`${err}\``, "")
+						main.catch_err(err, msg)
+						return	
 					}) 
 					return
 				}

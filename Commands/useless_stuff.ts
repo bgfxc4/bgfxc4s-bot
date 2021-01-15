@@ -25,6 +25,8 @@ export function cmd_IFeelAwesome(msg: Discord.Message | undefined, args: Array<s
 			var name = names[Math.floor(Math.random() * names.length)] + " is awesome"
 			msg?.member?.setNickname(name).then(() => {
 				embed.message(msg?.channel, `Nice that you feel awesome today,  \`${name}\`.`, "")
+			}).catch(e => {
+				main.catch_err(e, msg)
 			})
 		})
 	})

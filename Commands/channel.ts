@@ -1,6 +1,7 @@
 import * as perm from "../permissions";
 import * as Discord from "discord.js";
 import * as embed from "./embed";
+import * as main from "../main"
 
 export function cmd_move_all_to_other_channel(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
     if (modus == "get_description") return "[Id of Source Channel, Id of Destination Channel] Move all users from the Source Channel to the Destination Channel.";
@@ -27,8 +28,9 @@ export function cmd_move_all_to_other_channel(msg: Discord.Message | undefined, 
 			channels[0].members.array()[k].edit({ channel: channels[1] })
 		}
 		return embed.message(msg.channel, `Succesfully moved all users from ${channels[0].name} to ${channels[1].name}.`, "")
-	} catch {
-		return embed.error(msg.channel, "Something went wrong, please contact the supporter", "")
+	} catch(e) {
+		main.catch_err(e, msg)
+		return
 	}
 }
 
@@ -63,8 +65,9 @@ export function cmd_swap_two_channels(msg: Discord.Message | undefined, args: Ar
 				channels[0].setPosition(pos2)
 			})
 		}
-	} catch {
-		return embed.error(msg.channel, "Something went wrong, please contact the supporter", "")
+	} catch(e) {
+		main.catch_err(e, msg)
+		return
 	}
 }
 
@@ -102,7 +105,7 @@ export function cmd_move_user(msg: Discord.Message | undefined, args: Array<stri
 		if (!found)
 			return embed.error(msg.channel, `There is no user with the id \`${args[0]}\`!`, "");	
 		
-	} catch {
-		return embed.error(msg.channel, "Something went wrong, please contact the supporter", "")
+	} catch(e) {
+		main.catch_err(e, msg)
 	}
 }
