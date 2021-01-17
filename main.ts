@@ -54,6 +54,7 @@ client.on("ready", () => {
 var cmdmap: Array<CommandGroup> = [
 	{ name: "General", commands: [
 		{ invoke: "help", command: cmd_help },
+		{ invoke: "group_help", command: cmd_group_help },
 	]},
 	{ name: "Tagesschau", commands: [
 	    { invoke: "tagesschau_search", command: tagesschau.cmd_search },
@@ -152,24 +153,45 @@ export function catch_err(err: string, msg: Discord.Message) {
 }
 
 function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    var base = "Hi, im bgfxc4s bot.\nMy current prefix is " + config.prefix + ". All of my Commands are: \n";
     if (modus == "get_command") return "help";
     if (modus == "get_permission") return perm.list.none;
-    if (modus == "get_description") return "get a list of all commands";
-    if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need any arguments!", "");
-	
+    if (modus == "get_description") return "Get a list of all command groups.";
+    if (args?.length != 0) return embed.error(msg?.channel, "You need to specify one argument!", "");
+
+
+    var base = `All of the command groups are:\n`;
+
 	var help_msg = base;
 	for (var cmd_group in cmdmap) {
+		help_msg += "\n\u27A4\`" + cmdmap[cmd_group].name + "\`";
+	}
+	help_msg += `\n\nuse the command \`${config.prefix}group_help [group name]\` to get all commands from one group.`
+    embed.message(msg?.channel, help_msg, "");
+}
+
+function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
+    if (modus == "get_command") return "group_help";
+    if (modus == "get_permission") return perm.list.none;
+    if (modus == "get_description") return "[group name] Get a list and short description of all commands in one group.";
+    if (args?.length != 1) return embed.error(msg?.channel, "You need to specify one argument!", "");
+
+
+    var base = `All of the commands in the group \`${args[0]}\` are:\n\n`;
+
+	var help_msg = base;
+	for (var cmd_group in cmdmap) {
+		if (cmdmap[cmd_group].name.toLowerCase() != args[0].toLowerCase()) continue
+
 		if (cmdmap[cmd_group].show_on_list === false) continue
 		var help_msgs: Array<string> = [];
 		for (var cmd in cmdmap[cmd_group].commands) {
 			if (cmdmap[cmd_group].commands[cmd].show_on_list === false) continue; 
 			help_msgs.push(cmdmap[cmd_group].commands[cmd].invoke);
 		}
-		help_msg += "\n**" + cmdmap[cmd_group].name  + "**:\n";
+		
 		for (var i = 0; i < help_msgs.length; i++) {
 			if (i != 0) help_msg += "\n";
-			help_msg += "\u27A4 " + config.prefix + help_msgs[i] + ": " + get_cmd(help_msgs[i])(undefined, undefined, "get_description");
+			help_msg += "\u27A4 \`" + config.prefix + help_msgs[i] + "\`: " + get_cmd(help_msgs[i])(undefined, undefined, "get_description");
 		}
 	}
     embed.message(msg?.channel, help_msg, "");
