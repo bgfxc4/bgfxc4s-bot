@@ -49,6 +49,7 @@ interface CommandGroup {
 client.on("ready", () => {
 	setup_mongodb();
     console.log("[Discord.js] Logged in as " + client.user?.username + "...");
+	client.user?.setActivity(config.prefix + "help", { type: "LISTENING"}).catch(console.log)
 });
 
 var cmdmap: Array<CommandGroup> = [
