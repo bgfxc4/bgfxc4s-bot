@@ -4,14 +4,23 @@ import * as embed from "./embed";
 import * as main from "../main";
 import * as helper from "../helper";
 
-export function cmd_addPermission(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[userID, name of permission to add] add permission to other users.";
-    if (modus == "get_permission") return perm.list.manage_permissions;
+export function cmd_addPermission(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.manage_permissions,
+			description: "Add a permission to other users.",
+			args: [ 
+				{ name: "Id of User", type: main.args_types.number},
+				{ name: "Name of permission to add", type: main.args_types.text}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [userID, name of permission to add]!", "");
+    if (args == undefined || args.length != 2) return;
 
 	isUserOnServer(msg?.guild, args[0], (ret) => {
-		if (!ret) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
+		if (!ret) return embed.error(msg.channel, "The user with the Id " + args[0] + " is not on this server!", "");
 		helper.isUserKnown(args[0], msg.guild?.id, (found) => {
 			if (!found) {
 				if (args[0] == main.config.ownerID) {
@@ -45,11 +54,20 @@ export function cmd_addPermission(msg: Discord.Message | undefined, args: Array<
 }
 
 
-export function cmd_removePermission(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[userID, name of permission to remove] remove a permission from other users.";
-    if (modus == "get_permission") return perm.list.manage_permissions;
+export function cmd_removePermission(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.manage_permissions,
+			description: "Remove a permission from other users.",
+			args: [ 
+				{ name: "Id of User", type: main.args_types.number},
+				{ name: "Name of permission to add", type: main.args_types.text}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args[0] == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [userID, name of permission to remove]!", "");
+    if (args == undefined || args[0] == undefined || args.length != 2) return;
 
 	isUserOnServer(msg?.guild, args[0], (ret) => {
 		if (!ret) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
@@ -89,11 +107,19 @@ export function cmd_removePermission(msg: Discord.Message | undefined, args: Arr
 }
 
 
-export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[userID] get current Permissions from the user.";
-    if (modus == "get_permission") return perm.list.none;
+export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Get current Permissions from a user.",
+			args: [ 
+				{ name: "Id of User", type: main.args_types.number}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args[0] == undefined || args.length != 1) return embed.error(msg.channel, "You need to specify one arguments [userID]!", "");
+    if (args == undefined || args[0] == undefined || args.length != 1) return;
 
 	isUserOnServer(msg?.guild, args[0], (ret) => {
 		if (!ret) return embed.error(msg.channel, "The user with the id " + args[0] + " is not on this server!", "");
@@ -121,7 +147,7 @@ export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<
 						if (hasPermissions(user, allPermissions[i])) {
 							if (i != 0) answer += ", ";
 							answer += Object.keys(perm.list)[i];
-						}			
+						}
 					}
 					embed.message(msg.channel, "The user " + args[0] + " has the permissions " + answer, "");
 				});
@@ -131,11 +157,16 @@ export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<
 }
 
 
-export function cmd_permission_list(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: undefined | string) {
-    if (modus == "get_description") return "get a list of all permissions.";
-    if (modus == "get_permission") return perm.list.none;
-
-    var allKeys = Object.keys(perm.list);
+export function cmd_permission_list(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Get a list of all permissions",
+			args: []
+		}
+	}
+   
+	var allKeys = Object.keys(perm.list);
     var str = "";
     for (var i = 0; i < allKeys.length; i++) {
         if (i != 0) str += ", ";

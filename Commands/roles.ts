@@ -3,11 +3,19 @@ import * as Discord from "discord.js";
 import * as main from "../main";
 import * as embed from "./embed";
 
-export function cmd_giveRoleSelf(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[Role name] give yourself a role.";
-    if (modus == "get_permission") return perm.list.none;
+export function cmd_giveRoleSelf(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Give yourself a role.",
+			args: [
+				{name: "Name of the role", type: main.args_types.text}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return embed.error(msg.channel, "You need to specify one argument [Role name]!", "");
+    if (args == undefined || args.length != 1) return;
 	var query = { id: msg.guild?.id };
 
 	main.db.collection("servers").findOne(query, (err, res) => {
@@ -33,11 +41,19 @@ export function cmd_giveRoleSelf(msg: Discord.Message | undefined, args: Array<s
 	});
 }
 
-export function cmd_removeRoleSelf(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[Role name] remoe a role from yourself.";
-    if (modus == "get_permission") return perm.list.none;
+export function cmd_removeRoleSelf(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Remove a role from yourself.",
+			args: [
+				{name: "Name of the role", type: main.args_types.text}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return embed.error(msg.channel, "You need to specify one argument [Role name]!", "");
+    if (args == undefined || args.length != 1) return;
 	var query = { id: msg.guild?.id };
 
 	main.db.collection("servers").findOne(query, (err, res) => {
@@ -68,11 +84,17 @@ export function cmd_removeRoleSelf(msg: Discord.Message | undefined, args: Array
 	});
 }
 
-export function cmd_list_roles(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "get a list of all available roles.";
-    if (modus == "get_permission") return perm.list.none;
+export function cmd_list_roles(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Get a list of all available roles.",
+			args: []
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 0) return embed.error(msg.channel, "You dont need to specify an argument!", "");
+    if (args == undefined || args.length != 0) return;
 	
 	var list = "**All roles:**\n";
 
@@ -89,11 +111,20 @@ export function cmd_list_roles(msg: Discord.Message | undefined, args: Array<str
 	});
 }
 
-export function cmd_addManagedRole(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[Role name] add a role that I can manage.";
-    if (modus == "get_permission") return perm.list.manage_roles;
+export function cmd_addManagedRole(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.manage_roles,
+			description: "Add a role that I can manage.",
+			args: [ 
+				{ name: "Name of the role", type: main.args_types.text_with_spaces}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return embed.error(msg.channel, "You need to specify one argument [Role name]!", "");
+    if (args == undefined || args.length != 1) return;
+
 	var role = msg.guild?.roles.cache.find(role => role.name == args[0]);
 	if (role == undefined) {
 		return embed.error(msg.channel, `There is no role named \`${args[0]}\`.\n Tipp: you have to create the role manually and then add it to my managed roles.`, "");
@@ -116,11 +147,19 @@ export function cmd_addManagedRole(msg: Discord.Message | undefined, args: Array
 	}
 }
 
-export function cmd_removeManagedRole(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[Role name] remove a role that has been added.";
-    if (modus == "get_permission") return perm.list.manage_roles;
+export function cmd_removeManagedRole(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.manage_roles,
+			description: "Remove a role that has been added.",
+			args: [ 
+				{ name: "Name of the role", type: main.args_types.text_with_spaces}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return embed.error(msg.channel, "You need to specify one argument [Role name]!", "");
+    if (args == undefined || args.length != 1) return;
 
 	var query = { id: msg.guild?.id }
 	main.db.collection("servers").findOne(query, (err, res) => {
@@ -145,11 +184,20 @@ export function cmd_removeManagedRole(msg: Discord.Message | undefined, args: Ar
 	});
 }
 
-export function cmd_giveRole(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[Role id, id of user] give somebody a role.";
-    if (modus == "get_permission") return perm.list.admin;
+export function cmd_giveRole(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.admin,
+			description: "Give somebody a role.",
+			args: [ 
+				{ name: "Id of the role", type: main.args_types.number},
+				{ name: "Id of the user", type: main.args_types.number}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [Role id, id of user]!", "");
+    if (args == undefined || args.length != 2) return;
 
 	var users = msg.guild?.members.cache.array()
 	if (!users) return;
@@ -176,11 +224,20 @@ export function cmd_giveRole(msg: Discord.Message | undefined, args: Array<strin
 	return embed.error(msg.channel, `There is no user with the id \`${args[1]}\` on this server.`, "")
 }
 
-export function cmd_removeRole(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "[Role id, id of user] remoe a role from somebody.";
-    if (modus == "get_permission") return perm.list.admin;
+export function cmd_removeRole(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.admin,
+			description: "Remove a role from somebody.",
+			args: [ 
+				{ name: "Id of the role", type: main.args_types.number},
+				{ name: "Id of the user", type: main.args_types.number}
+			]
+		}
+	}
+
     if (msg == undefined) return;
-    if (args == undefined || args.length != 2) return embed.error(msg.channel, "You need to specify two arguments [Role id, id of user]!", "");
+    if (args == undefined || args.length != 2) return;
 	
 	var users = msg.guild?.members.cache.array()
 	if (!users) return

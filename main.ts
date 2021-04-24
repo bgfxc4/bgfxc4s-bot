@@ -18,6 +18,12 @@ export var db: Db;
 
 export var client = new Discord.Client();
 
+export enum args_types {
+	number,
+	text,
+	text_with_spaces
+}
+
 export interface User {
     id: string | undefined;
     permission: number;
@@ -110,7 +116,8 @@ client.on("message", (msg) => {
 
                 if (cmd_exists(invoke)) {
 					check_server_and_user(msg, args, invoke, (user) => {
-						if (cmd_perm.hasPermissions(user, get_cmd(invoke)(undefined, undefined, "get_permission"))) {
+						if (cmd_perm.hasPermissions(user, get_cmd(invoke)(undefined, undefined, true).permission)) {
+							if (check_args(msg, invoke, args, get_cmd(invoke)(undefined, undefined, true).args))
 							get_cmd(invoke)(msg, args, undefined);
 						} else {
 							embed.error(msg.channel, "You dont have the required Permissions!", "");
@@ -137,11 +144,29 @@ function cmd_exists(invoke: string) {
     return false;
 }
 
+function check_args(msg: Discord.Message, command: string,given_args: Array<string>, required_args: any) {
+	if (required_args.length != given_args.length && required_args[required_args.length - 1].type != args_types.text_with_spaces) {
+		embed.error(msg.channel, `This command needs ${required_args.length} arguments, but you gave ${given_args.length}.\n
+					To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
+		return false;
+	}
+	for (var i = 0; i < required_args.length; i++) {
+		if (required_args[i].type == args_types.number) {
+			if (!+given_args[i]) {
+				embed.error(msg.channel, `The ${i + 1}. argument needs to be a number (without , or .).\n
+							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 function get_cmd(invoke: string) {
 	for (var cmd_group in cmdmap) {
 		for (var cmd in cmdmap[cmd_group].commands) {
 			if (cmdmap[cmd_group].commands[cmd].invoke == invoke) {
-				return cmdmap[cmd_group].commands[cmd].command;;
+				return cmdmap[cmd_group].commands[cmd].command;
 			}
 		}
     }
@@ -153,12 +178,14 @@ export function catch_err(err: string, msg: Discord.Message) {
     console.log("ERROR: " + err);
 }
 
-function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_command") return "help";
-    if (modus == "get_permission") return perm.list.none;
-    if (modus == "get_description") return "Get a list of all command groups.";
-    if (args?.length != 0) return embed.error(msg?.channel, "You need to specify one argument!", "");
-
+function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Get a list of all command groups.",
+			args: []
+		}
+	}
 
     var base = `All of the command groups are:\n`;
 
@@ -170,20 +197,26 @@ function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefi
     embed.message(msg?.channel, help_msg, "");
 }
 
-function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_command") return "group_help";
-    if (modus == "get_permission") return perm.list.none;
-    if (modus == "get_description") return "[group name] Get a list and short description of all commands in one group.";
-    if (args?.length != 1) return embed.error(msg?.channel, "You need to specify one argument!", "");
+function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {	
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Get a list and short description of all commands in one group.",
+			args: [
+				{ name: "Name of group", type: "Group name"}
+			]
+		}
+	}
 
+	if (args?.length != 1) return;
 
     var base = `All of the commands in the group \`${args[0]}\` are:\n\n`;
 
 	var help_msg = base;
 	for (var cmd_group in cmdmap) {
-		if (cmdmap[cmd_group].name.toLowerCase() != args[0].toLowerCase()) continue
+		if (cmdmap[cmd_group].name.toLowerCase() != args[0].toLowerCase()) continue;
 
-		if (cmdmap[cmd_group].show_on_list === false) continue
+		if (cmdmap[cmd_group].show_on_list === false) continue;
 		var help_msgs: Array<string> = [];
 		for (var cmd in cmdmap[cmd_group].commands) {
 			if (cmdmap[cmd_group].commands[cmd].show_on_list === false) continue; 
@@ -192,7 +225,7 @@ function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | 
 		
 		for (var i = 0; i < help_msgs.length; i++) {
 			if (i != 0) help_msg += "\n";
-			help_msg += "\u27A4 \`" + config.prefix + help_msgs[i] + "\`: " + get_cmd(help_msgs[i])(undefined, undefined, "get_description");
+			help_msg += "\u27A4 \`" + config.prefix + help_msgs[i] + "\`: " + get_cmd(help_msgs[i])(undefined, undefined, true).description;
 		}
 	}
     embed.message(msg?.channel, help_msg, "");

@@ -4,11 +4,16 @@ import * as perm from "../permissions";
 import * as embed from "./embed"
 import * as https from "https"
 
-export function cmd_IFeelAwesome(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_command") return "i_feel_awesome";
-    if (modus == "get_permission") return perm.list.none;
-    if (modus == "get_description") return "Execute, if you feel awesome today.";
-    if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need any arguments!", "");
+export function cmd_IFeelAwesome(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Execute, if you feel awesome today.",
+			args: []
+		}
+	}
+
+    if (args?.length != 0) return;
 	
 	var options = {
 		hostname: "bgfxc4.de",

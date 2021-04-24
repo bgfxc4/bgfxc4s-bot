@@ -3,10 +3,16 @@ import * as https from "https";
 import * as embed from "./embed";
 import * as perm from "../permissions";
 
-export function cmd_lastLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_permission") return perm.list.space_launch;
-    if (modus == "get_description") return "Get the last 5 rocket launches.";
-    if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need a parameter!", "");
+export function cmd_lastLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.space_launch,
+			description: "Get the last 5 rocket launches.",
+			args: []
+		}
+	}
+
+    if (args?.length != 0) return;
     var requestObj: any;
     var requestStr = "";
     var response = "";
@@ -31,11 +37,18 @@ export function cmd_lastLaunch(msg: Discord.Message | undefined, args: Array<str
         });
 }
 
-export function cmd_nextLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_permission") return perm.list.space_launch;
-    if (modus == "get_description") return "Get the next 5 rocket launches.";
-    if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need a parameter!", "");
-    var requestObj: any;
+export function cmd_nextLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.space_launch,
+			description: "Get the next 5 rocket launches.",
+			args: []
+		}
+	}
+
+    if (args?.length != 0) return;
+    
+	var requestObj: any;
     var requestStr = "";
     var response = "";
     https
@@ -59,10 +72,17 @@ export function cmd_nextLaunch(msg: Discord.Message | undefined, args: Array<str
         });
 }
 
-export function cmd_lastSpaceXLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_permission") return perm.list.space_launch;
-    if (modus == "get_description") return "Get the last 5 SpaceX launches.";
-    if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need a parameter!", "");
+export function cmd_lastSpaceXLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.space_launch,
+			description: "Get the last 5 SpaceX launches.",
+			args: []
+		}
+	}
+
+    if (args?.length != 0) return;
+
     var requestObj: any;
     var requestStr = "";
     var response = "";
@@ -87,10 +107,17 @@ export function cmd_lastSpaceXLaunch(msg: Discord.Message | undefined, args: Arr
         });
 }
 
-export function cmd_nextSpaceXLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_permission") return perm.list.space_launch;
-    if (modus == "get_description") return "Get the next 5 SpaceX launches.";
-    if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need a parameter!", "");
+export function cmd_nextSpaceXLaunch(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.space_launch,
+			description: "Get the next 5 SpaceX launches.",
+			args: []
+		}
+	}
+
+    if (args?.length != 0) return;
+
     var requestObj: any;
     var requestStr = "";
     var response = "";

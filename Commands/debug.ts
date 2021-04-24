@@ -3,18 +3,30 @@ import * as Discord from "discord.js";
 import * as embed from "./embed";
 import * as main from "../main"
 
-export function cmd_get_pid(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "Print the pid of the current process.";
-    if (modus == "get_permission") return perm.list.admin
+export function cmd_get_pid(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.admin,
+			description: "Print the pid of the current process.",
+			args: []
+		}
+	}
+
     if (msg == undefined) return;
 	if (args == undefined || args.length != 0) return embed.error(msg.channel, "You dont need to specify any arguments!", "");
 
-	embed.message(msg.channel, `The current pid is ${process.pid}.`, "")
+	embed.message(msg.channel, `The current pid is ${process.pid}.`, "");
 }
 
-export function cmd_temp_cmd(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_description") return "A temporary cmd, i.e. to cheange settings.";
-    if (modus == "get_permission") return perm.list.admin
+export function cmd_temp_cmd(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.admin,
+			description: "A temporary cmd, i.e. to change settings.",
+			args: []
+		}
+	}
+
     if (msg == undefined) return;
 	if (args == undefined || args.length != 0) return embed.error(msg.channel, "You dont need to specify any arguments!", "");
 

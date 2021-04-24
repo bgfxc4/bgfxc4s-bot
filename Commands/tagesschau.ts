@@ -2,11 +2,21 @@ import * as Discord from "discord.js";
 import * as https from "https";
 import * as embed from "./embed";
 import * as perm from "../permissions";
+import * as main from "../main";
 
-export function cmd_search(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_permission") return perm.list.tagesschau;
-    if (modus == "get_description") return "[keywords] search for the 5 newest tagesschau articles with keywords";
-    if (args?.length == 0) return embed.error(msg?.channel, "You need to specify at least one keyword!", "");
+export function cmd_search(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.tagesschau,
+			description: "Search for the 5 newest tagesschau articles with keywords",
+			args: [
+				{ name: "Keywords for the search", type: main.args_types.text}
+			]
+		}
+	}
+
+    if (args?.length == 0) return;
+
     var requestObj: any;
     var requestStr = "";
     https
@@ -30,10 +40,17 @@ export function cmd_search(msg: Discord.Message | undefined, args: Array<string>
         });
 }
 
-export function cmd_news(msg: Discord.Message | undefined, args: Array<string> | undefined, modus: string | undefined) {
-    if (modus == "get_permission") return perm.list.tagesschau;
-    if (modus == "get_description") return "get the 5 newest articles";
-    if (args?.length != 0) return embed.error(msg?.channel, "This command doesnt need a argument!", "");
+export function cmd_news(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.tagesschau,
+			description: "Get the 5 newest articles",
+			args: []
+		}
+	}
+
+    if (args?.length != 0) return;
+
     var requestObj: any;
     var requestStr = "";
     https
@@ -58,13 +75,13 @@ export function cmd_news(msg: Discord.Message | undefined, args: Array<string> |
 }
 
 function get_string_to_article(jsonObject: any) {
-    if (jsonObject.type == "video") {
+    if (jsonObject?.type == "video") {
         //return jsonObject.title + "\nhttps://www.tagesschau.de/multimedia/video/" + jsonObject.sophoraId + "~_parentId-ondemand100.html";
         return "[" + jsonObject.title + "](" + "https://www.tagesschau.de/multimedia/video/" + jsonObject.sophoraId + "~_parentId-ondemand100.html" + ")";
-    } else if (jsonObject.type == "story") {
+    } else if (jsonObject?.type == "story") {
         //return jsonObject.title + "\n" + jsonObject.detailsweb;
         return "[" + jsonObject.title + "](" + jsonObject.detailsweb + ")";
     } else {
-        return jsonObject.title;
+        return jsonObject?.title;
     }
 }
