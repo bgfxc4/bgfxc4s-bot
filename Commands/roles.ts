@@ -9,35 +9,35 @@ export function cmd_giveRoleSelf(msg: Discord.Message | undefined, args: Array<s
 			permission: perm.list.none,
 			description: "Give yourself a role.",
 			args: [
-				{name: "Name of the role", type: main.args_types.text}
+				{name: "Name of the role", type: main.args_types.text_with_spaces}
 			]
 		}
 	}
 
     if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return;
+    if (args == undefined) return;
 	var query = { id: msg.guild?.id };
 
 	main.db.collection("servers").findOne(query, (err, res) => {
 		if (err) throw err;
 		if (res.roles_to_manage.length == 0) return embed.info(msg.channel, "There are no roles I can manage on this server.", "");
 		for(var i in res.roles_to_manage) {
-			if (res.roles_to_manage[i].name == args[0]) {
+			if (res.roles_to_manage[i].name == args.join(' ')) {
 				var role = msg.guild?.roles.cache.find(role => role.name == res.roles_to_manage[i].name);
 				if (role != undefined)  {
 					msg.member?.roles.add(role).then(() => {
-						return embed.message(msg.channel, `The role ${args[0]} was succesfully given to you.`, "");
+						return embed.message(msg.channel, `The role ${args.join(' ')} was succesfully given to you.`, "");
 					}).catch((err) => {
 							main.catch_err(err, msg)
 							return
 					}) 
 				} else {
-					return embed.error(msg.channel, `The role ${args[0]} does not exist anymore on this server! Pleas delete it out of my list with \`${main.config.prefix}remove_managed_role\``, "");
+					return embed.error(msg.channel, `The role ${args.join(' ')} does not exist anymore on this server! Pleas delete it out of my list with \`${main.config.prefix}remove_managed_role\``, "");
 				}
 				return 			
 			}
 		}
-		return embed.error(msg.channel, `I cant manage the role ${args[0]}!`, "");
+		return embed.error(msg.channel, `I cant manage the role ${args.join(' ')}!`, "");
 	});
 }
 
@@ -47,40 +47,40 @@ export function cmd_removeRoleSelf(msg: Discord.Message | undefined, args: Array
 			permission: perm.list.none,
 			description: "Remove a role from yourself.",
 			args: [
-				{name: "Name of the role", type: main.args_types.text}
+				{name: "Name of the role", type: main.args_types.text_with_spaces}
 			]
 		}
 	}
 
     if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return;
+    if (args == undefined) return;
 	var query = { id: msg.guild?.id };
 
 	main.db.collection("servers").findOne(query, (err, res) => {
 		if (err) throw err;
 		if (res.roles_to_manage.length == 0) return embed.info(msg.channel, "There are no roles I can manage on this server.", "");
 		for(var i in res.roles_to_manage) {
-			if (res.roles_to_manage[i].name == args[0]) {
+			if (res.roles_to_manage[i].name == args.join(' ')) {
 				var role = msg.guild?.roles.cache.find(role => role.name == res.roles_to_manage[i].name);
 				if (role != undefined)  {
-					var has_role = msg.member?.roles.cache.each(role => role.name == args[0]);
+					var has_role = msg.member?.roles.cache.each(role => role.name == args.join(' '));
 					if (has_role != undefined) {
 						msg.member?.roles.remove(role.id).then(() => {
-							return embed.message(msg.channel, `The role ${args[0]} was succesfully removed from you.`, "");
+							return embed.message(msg.channel, `The role ${args.join(' ')} was succesfully removed from you.`, "");
 						}).catch((err) => {
 							main.catch_err(err, msg)
 							return
 						}) 
 						return
 					} else {
-						return  embed.error(msg.channel, `You dont have the role ${args[0]}.`, "");
+						return  embed.error(msg.channel, `You dont have the role ${args.join(' ')}.`, "");
 					}
 				} else {
-					return embed.error(msg.channel, `The role ${args[0]} does not exist anymore on this server! Pleas delete it out of my list with \`${main.config.prefix}remove_managed_role\``, "");
+					return embed.error(msg.channel, `The role ${args.join(' ')} does not exist anymore on this server! Pleas delete it out of my list with \`${main.config.prefix}remove_managed_role\``, "");
 				}
 			}
 		}
-		return embed.error(msg.channel, `I cant manage the role ${args[0]}!`, "");
+		return embed.error(msg.channel, `I cant manage the role ${args.join(' ')}!`, "");
 	});
 }
 
@@ -122,26 +122,27 @@ export function cmd_addManagedRole(msg: Discord.Message | undefined, args: Array
 		}
 	}
 
-    if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return;
+    if (msg == undefined) return;	
+	if (args == undefined) return;
 
-	var role = msg.guild?.roles.cache.find(role => role.name == args[0]);
+	var role = msg.guild?.roles.cache.find(role => role.name == args.join(' '));
+	console.log(role);
 	if (role == undefined) {
-		return embed.error(msg.channel, `There is no role named \`${args[0]}\`.\n Tipp: you have to create the role manually and then add it to my managed roles.`, "");
+		return embed.error(msg.channel, `There is no role named \`${args.join(' ')}\`.\n Tipp: you have to create the role manually and then add it to my managed roles.`, "");
 	} else {
 		var query = { id: msg.guild?.id }
 		main.db.collection("servers").findOne(query, (err, res) => {
 			if (err) throw err;
 			for (var i in res.roles_to_manage) {
 				if (res.roles_to_manage[i].name == role?.name) {
-					return embed.info(msg.channel, `The role \`${args[0]}\` is already added.`, "");
+					return embed.info(msg.channel, `The role \`${args.join(' ')}\` is already added.`, "");
 				}
 			}
 			res.roles_to_manage.push({ id: role?.id, name: role?.name});
 			var to_set = { $set: { roles_to_manage: res.roles_to_manage}}
 			main.db.collection("servers").updateOne(query, to_set, (err, res) => {
 				if (err) throw err;
-				return embed.message(msg.channel, `Added the role \`${args[0]}\``, "");
+				return embed.message(msg.channel, `Added the role \`${args.join(' ')}\``, "");
 			});
 		});
 	}
@@ -159,27 +160,27 @@ export function cmd_removeManagedRole(msg: Discord.Message | undefined, args: Ar
 	}
 
     if (msg == undefined) return;
-    if (args == undefined || args.length != 1) return;
+    if (args == undefined) return;
 
 	var query = { id: msg.guild?.id }
 	main.db.collection("servers").findOne(query, (err, res) => {
 		if (err) throw err;
 		var found = "-1";
 		for (var i in res.roles_to_manage) {
-			if (res.roles_to_manage[i].name == args[0]) {
+			if (res.roles_to_manage[i].name == args.join(' ')) {
 				found = i;
 				break;
 			}
 		}
 		if (found == "-1"){
-			return embed.info(msg.channel, `The role \`${args[0]}\` is already added.`, "");
+			return embed.info(msg.channel, `The role \`${args.join(' ')}\` is already added.`, "");
 		}
 
 		res.roles_to_manage.splice(found, 1);
 		var to_set = { $set: { roles_to_manage: res.roles_to_manage}}
 		main.db.collection("servers").updateOne(query, to_set, (err, res) => {
 			if (err) throw err;
-			return embed.message(msg.channel, `Removed the role \`${args[0]}\``, "");
+			return embed.message(msg.channel, `Removed the role \`${args.join(' ')}\``, "");
 		});
 	});
 }
