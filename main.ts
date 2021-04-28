@@ -225,11 +225,15 @@ function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | 
 		}
 		
 		for (var i = 0; i < help_msgs.length; i++) {
-			if (i != 0) help_msg += "\n";
+			if (i != 0) help_msg += "\n" ;
 			help_msg += "\u27A4 \`" + config.prefix + help_msgs[i] + "\`: " + get_cmd(help_msgs[i])(undefined, undefined, true).description;
 		}
+
+		help_msg += `\n\nTo get more info on a specific command, you can try \`${config.prefix}command_help [command]\`!`;
+
+		return embed.message(msg?.channel, help_msg, "");
 	}
-    embed.message(msg?.channel, help_msg, "");
+    embed.error(msg?.channel, `There is no command group named \`${args[0]}\`!`, "");
 }
 
 function cmd_command_help(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {	
