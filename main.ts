@@ -9,6 +9,7 @@ import * as tagesschau from "./Commands/tagesschau";
 import * as space_launch from "./Commands/space_launch";
 import * as roles from "./Commands/roles";
 import * as channels from "./Commands/channel"
+import * as insults from "./Commands/insults"
 import * as useless_stuff from "./Commands/useless_stuff"
 import * as debug from "./Commands/debug"
 
@@ -21,7 +22,8 @@ export var client = new Discord.Client();
 export enum args_types {
 	number,
 	text,
-	text_with_spaces
+	text_with_spaces,
+	user_mention
 }
 
 export interface User {
@@ -92,6 +94,10 @@ var cmdmap: Array<CommandGroup> = [
 	{ name: "Channels", commands: [
 		{ invoke: "move_all_users", command: channels.cmd_move_all_to_other_channel },
 		{ invoke: "move_user", command: channels.cmd_move_user }
+	]},
+	{ name: "Insults", commands: [
+		{ invoke: "insult", command: insults.cmd_insult},
+		{ invoke: "insult_dm", command: insults.cmd_insult_dm}
 	]},
 	{ name: "Useles stuff", commands: [
 		{ invoke: "i_feel_awesome", command: useless_stuff.cmd_IFeelAwesome}

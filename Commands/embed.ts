@@ -6,7 +6,7 @@ const COLORS = {
     green: 0x2ecc71,
 };
 
-export function error(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string) {
+export function error(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string, callback?: () => void) {
     var message:any;
     var emb = new Discord.MessageEmbed();
     emb.setColor(COLORS.red);
@@ -16,11 +16,14 @@ export function error(chan:Discord.TextChannel | Discord.DMChannel | Discord.New
     }
     chan?.send("", emb).then((m) => {
         message = m;
-    });
+    }).then(callback)
+	.catch(() => {
+		error(chan, `Something went wrong sending the message.`, "");
+	});
     return message;
 }
 
-export function info(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string) {
+export function info(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string, callback?: () => void) {
     var message:any;
     var emb = new Discord.MessageEmbed();
     emb.setColor(COLORS.yellow);
@@ -30,11 +33,14 @@ export function info(chan:Discord.TextChannel | Discord.DMChannel | Discord.News
     }
     chan?.send("", emb).then((m) => {
         message = m;
-    });
+    }).then(callback)
+	.catch(() => {
+		error(chan, `Something went wrong sending the message.`, "");
+	});
     return message;
 }
 
-export function message(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string) {
+export function message(chan:Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel | undefined, cont:string, title:string, callback?: () => void) {
     var message:any;
     var emb = new Discord.MessageEmbed();
     emb.setColor(COLORS.green);
@@ -44,7 +50,10 @@ export function message(chan:Discord.TextChannel | Discord.DMChannel | Discord.N
     }
     chan?.send("", emb).then((m) => {
         message = m;
-    });
+    }).then(callback)
+	.catch(() => {
+		error(chan, `Something went wrong sending the message.`, "");
+	});
     return message;
 }
 
