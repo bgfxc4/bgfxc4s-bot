@@ -62,6 +62,7 @@ var cmdmap: Array<CommandGroup> = [
 	{ name: "General", commands: [
 		{ invoke: "help", command: cmd_help },
 		{ invoke: "group_help", command: cmd_group_help },
+		{ invoke: "command_help", command: cmd_command_help },
 	]},
 	{ name: "Tagesschau", commands: [
 	    { invoke: "tagesschau_search", command: tagesschau.cmd_search },
@@ -203,7 +204,7 @@ function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | 
 			permission: perm.list.none,
 			description: "Get a list and short description of all commands in one group.",
 			args: [
-				{ name: "Name of group", type: "Group name"}
+				{ name: "Name of group", type: args_types.text}
 			]
 		}
 	}
@@ -229,6 +230,60 @@ function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | 
 		}
 	}
     embed.message(msg?.channel, help_msg, "");
+}
+
+function cmd_command_help(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {	
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Get a list and short description of all commands in one group.",
+			args: [
+				{ name: "Name of command", type: args_types.text}
+			]
+		}
+	}
+
+	if (args?.length != 1) return;
+
+	if (!cmd_exists(args[0])) {
+		embed.error(msg?.channel, `The command ${args[0]} does not exist!`, "");
+	}
+
+	var info = get_cmd(args[0])(undefined, undefined, true);
+
+	var help_msg = `**Description:**\n${info.description}`;
+
+	if (info.args.length != 0)
+		help_msg += `\n**Arguments:**`;
+
+	for (var arg of info.args)
+		help_msg += `\n\tName: ${arg.name} Type: ${arg_to_text(arg.type)}`;
+
+	help_msg +=  `\n**Required permission:**\n${perm_to_text(info.permission)}`;
+
+    embed.message(msg?.channel, help_msg, "");
+}
+
+function arg_to_text(arg: any) {
+	switch(arg){
+		case args_types.text:
+			return "Text (only one word)";
+		case args_types.number:
+			return "Number (no . or ,)";
+		case args_types.text_with_spaces: 
+			return "Text (multiple words)";
+		default: 
+			return "An error occured";
+	}
+}
+
+function perm_to_text(perm_in: any) {
+	var perm_entries = Object.entries(perm.list);
+	for (var perm_entry of perm_entries) {
+		if (perm_entry[1] == perm_in)
+			return perm_entry[0];
+	}
+	return "An error occured";
 }
 
 function check_server_and_user(msg: Discord.Message, args: Array<string>, invoke: string, callback: (user: User | undefined) => void) {
