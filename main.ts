@@ -164,6 +164,33 @@ function check_args(msg: Discord.Message, command: string,given_args: Array<stri
 							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
 				return false;
 			}
+		} else if (required_args[i].type == args_types.user_mention) {
+			var mentions = /<@!(\d+)>/g.exec(given_args[i]);
+			if (!mentions?.length) {
+				embed.error(msg.channel, `The ${i + 1}. argument needs to be a user mention (e.g. <@!691979492662444073>).\n
+							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
+				return false;
+			}
+			if (mentions[0] != given_args[i]) {
+				embed.error(msg.channel, `The ${i + 1}. argument should only be a user mention (e.g. <@!691979492662444073>).\n
+							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
+				return false;
+			}
+
+			var users = msg.guild?.members.cache.array();
+			if (users == undefined) return false;
+			var found = false;
+			for (var user of users) {
+				if (user.id == mentions[1]) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				embed.error(msg.channel, `The ${i + 1}. argument needs to be a user mention, but the user you mentioned is not on this server.\n
+							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
+				return false;
+			}
 		}
 	}
 	return true;
@@ -282,6 +309,8 @@ function arg_to_text(arg: any) {
 			return "Number (no . or ,)";
 		case args_types.text_with_spaces: 
 			return "Text (multiple words)";
+		case args_types.user_mention:
+			return "User mention (e.g. <@!691979492662444073>)"
 		default: 
 			return "An error occured";
 	}
