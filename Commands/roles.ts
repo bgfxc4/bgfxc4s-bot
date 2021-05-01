@@ -9,7 +9,7 @@ export function cmd_giveRoleSelf(msg: Discord.Message | undefined, args: Array<s
 			permission: perm.list.none,
 			description: "Give yourself a role.",
 			args: [
-				{name: "Name of the role", type: main.args_types.text_with_spaces}
+				{name: "Name of the role", type: [main.args_types.text_with_spaces]}
 			]
 		}
 	}
@@ -47,7 +47,7 @@ export function cmd_removeRoleSelf(msg: Discord.Message | undefined, args: Array
 			permission: perm.list.none,
 			description: "Remove a role from yourself.",
 			args: [
-				{name: "Name of the role", type: main.args_types.text_with_spaces}
+				{name: "Name of the role", type: [main.args_types.text_with_spaces]}
 			]
 		}
 	}
@@ -117,7 +117,7 @@ export function cmd_addManagedRole(msg: Discord.Message | undefined, args: Array
 			permission: perm.list.manage_roles,
 			description: "Add a role that I can manage.",
 			args: [ 
-				{ name: "Name of the role", type: main.args_types.text_with_spaces}
+				{ name: "Name of the role", type: [main.args_types.text_with_spaces]}
 			]
 		}
 	}
@@ -154,7 +154,7 @@ export function cmd_removeManagedRole(msg: Discord.Message | undefined, args: Ar
 			permission: perm.list.manage_roles,
 			description: "Remove a role that has been added.",
 			args: [ 
-				{ name: "Name of the role", type: main.args_types.text_with_spaces}
+				{ name: "Name of the role", type: [main.args_types.text_with_spaces]}
 			]
 		}
 	}
@@ -191,8 +191,8 @@ export function cmd_giveRole(msg: Discord.Message | undefined, args: Array<strin
 			permission: perm.list.admin,
 			description: "Give somebody a role.",
 			args: [ 
-				{ name: "Id of the role", type: main.args_types.number},
-				{ name: "Id of the user", type: main.args_types.number}
+				{ name: "Id of the role", type: [main.args_types.number]},
+				{ name: "Id of the user", type: [main.args_types.number]}
 			]
 		}
 	}
@@ -231,8 +231,8 @@ export function cmd_removeRole(msg: Discord.Message | undefined, args: Array<str
 			permission: perm.list.admin,
 			description: "Remove a role from somebody.",
 			args: [ 
-				{ name: "Id of the role", type: main.args_types.number},
-				{ name: "Id of the user", type: main.args_types.number}
+				{ name: "Id of the role", type: [main.args_types.number]},
+				{ name: "Id of the user", type: [main.args_types.number]}
 			]
 		}
 	}

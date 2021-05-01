@@ -10,7 +10,7 @@ export function cmd_insult(msg: Discord.Message | undefined, args: Array<string>
 			permission: perm.list.none,
 			description: "Insult somebody you dont like.",
 			args: [
-				{ name: "Mention the user you want to insult", type: main.args_types.user_mention}
+				{ name: "Mention the user you want to insult", type: [main.args_types.user_mention]}
 			]
 		}
 	}
@@ -45,7 +45,7 @@ export function cmd_insult_dm(msg: Discord.Message | undefined, args: Array<stri
 			permission: perm.list.none,
 			description: "Insult somebody you dont like per DM.",
 			args: [
-				{ name: "Mention the user you want to insult", type: main.args_types.user_mention}
+				{ name: "Mention the user you want to insult", type: [main.args_types.user_mention]}
 			]
 		}
 	}

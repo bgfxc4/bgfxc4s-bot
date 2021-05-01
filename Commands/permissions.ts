@@ -10,8 +10,8 @@ export function cmd_addPermission(msg: Discord.Message | undefined, args: Array<
 			permission: perm.list.manage_permissions,
 			description: "Add a permission to other users.",
 			args: [ 
-				{ name: "Id of User", type: main.args_types.number},
-				{ name: "Name of permission to add", type: main.args_types.text}
+				{ name: "Id of User", type: [main.args_types.number]},
+				{ name: "Name of permission to add", type: [main.args_types.text]}
 			]
 		}
 	}
@@ -60,8 +60,8 @@ export function cmd_removePermission(msg: Discord.Message | undefined, args: Arr
 			permission: perm.list.manage_permissions,
 			description: "Remove a permission from other users.",
 			args: [ 
-				{ name: "Id of User", type: main.args_types.number},
-				{ name: "Name of permission to add", type: main.args_types.text}
+				{ name: "Id of User", type: [main.args_types.number]},
+				{ name: "Name of permission to add", type: [main.args_types.text]}
 			]
 		}
 	}
@@ -113,7 +113,7 @@ export function cmd_getPermission(msg: Discord.Message | undefined, args: Array<
 			permission: perm.list.none,
 			description: "Get current Permissions from a user.",
 			args: [ 
-				{ name: "Id of User", type: main.args_types.number}
+				{ name: "Id of User", type: [main.args_types.number]}
 			]
 		}
 	}

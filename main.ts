@@ -23,7 +23,8 @@ export enum args_types {
 	number,
 	text,
 	text_with_spaces,
-	user_mention
+	user_mention,
+	void_channel_mention
 }
 
 export interface User {
@@ -65,6 +66,7 @@ var cmdmap: Array<CommandGroup> = [
 		{ invoke: "help", command: cmd_help },
 		{ invoke: "group_help", command: cmd_group_help },
 		{ invoke: "command_help", command: cmd_command_help },
+		{ invoke: "ping", command: cmd_ping },
 	]},
 	{ name: "Tagesschau", commands: [
 	    { invoke: "tagesschau_search", command: tagesschau.cmd_search },
@@ -158,40 +160,67 @@ function check_args(msg: Discord.Message, command: string,given_args: Array<stri
 		return false;
 	}
 	for (var i = 0; i < required_args.length; i++) {
-		if (required_args[i].type == args_types.number) {
-			if (!+given_args[i]) {
-				embed.error(msg.channel, `The ${i + 1}. argument needs to be a number (without , or .).\n
-							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
-				return false;
-			}
-		} else if (required_args[i].type == args_types.user_mention) {
-			var mentions = /<@!(\d+)>/g.exec(given_args[i]);
-			if (!mentions?.length) {
-				embed.error(msg.channel, `The ${i + 1}. argument needs to be a user mention (e.g. <@!691979492662444073>).\n
-							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
-				return false;
-			}
-			if (mentions[0] != given_args[i]) {
-				embed.error(msg.channel, `The ${i + 1}. argument should only be a user mention (e.g. <@!691979492662444073>).\n
-							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
-				return false;
-			}
+		var valid = false;
+		for (var j = 0; j < required_args[i].type.length; j++) {
+			if (check_arg(msg, given_args[i], i, required_args[i].type[j], command)) valid = true;
+		}
+		if (!valid) {
+			embed.error(msg.channel, `The ${i + 1}. argument is wrong.\n
+						To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
+			return false;
+		}
+	}
+	return true;
+}
 
-			var users = msg.guild?.members.cache.array();
-			if (users == undefined) return false;
-			var found = false;
-			for (var user of users) {
-				if (user.id == mentions[1]) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				embed.error(msg.channel, `The ${i + 1}. argument needs to be a user mention, but the user you mentioned is not on this server.\n
-							To get more info about this command and its arguments, use \`${config.prefix}command_help ${command}\``, "");
-				return false;
+function check_arg(msg: Discord.Message, arg: string, arg_index: number, arg_type: any, command: string) {
+	if (arg_type == args_types.number) {
+		if (!+arg) {
+			return false;
+		}
+	} else if (arg_type == args_types.user_mention) {
+		var mentions = /<@!(\d+)>/g.exec(arg);
+		if (!mentions?.length) {
+			return false;
+		}
+		if (mentions[0] != arg) {
+			return false;
+		}
+
+		var users = msg.guild?.members.cache.array();
+		if (users == undefined) return false;
+		var found = false;
+		for (var user of users) {
+			if (user.id == mentions[1]) {
+				found = true;
+				break;
 			}
 		}
+		if (!found) {
+			return false;
+		}
+	} else if (arg_type == args_types.void_channel_mention) {
+		var mentions = /<#(\d+)>/g.exec(arg);
+		if (!mentions?.length) {
+			return false;
+		}
+		if (mentions[0] != arg) {
+			return false;
+		}
+
+		var channels = msg.guild?.channels.cache.array();
+		if (channels == undefined) return false;
+		var found = false;
+		for (var channel of channels) {
+			if (channel.id == mentions[1] && channel.type == "voice") {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			return false;
+		}
+
 	}
 	return true;
 }
@@ -237,7 +266,7 @@ function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | 
 			permission: perm.list.none,
 			description: "Get a list and short description of all commands in one group.",
 			args: [
-				{ name: "Name of group", type: args_types.text}
+				{ name: "Name of group", type: [args_types.text]}
 			]
 		}
 	}
@@ -275,7 +304,7 @@ function cmd_command_help(msg: Discord.Message | undefined, args: Array<string> 
 			permission: perm.list.none,
 			description: "Get a list and short description of all commands in one group.",
 			args: [
-				{ name: "Name of command", type: args_types.text}
+				{ name: "Name of command", type: [args_types.text]}
 			]
 		}
 	}
@@ -283,7 +312,7 @@ function cmd_command_help(msg: Discord.Message | undefined, args: Array<string> 
 	if (args?.length != 1) return;
 
 	if (!cmd_exists(args[0])) {
-		embed.error(msg?.channel, `The command ${args[0]} does not exist!`, "");
+		return embed.error(msg?.channel, `The command ${args[0]} does not exist!`, "");
 	}
 
 	var info = get_cmd(args[0])(undefined, undefined, true);
@@ -294,26 +323,50 @@ function cmd_command_help(msg: Discord.Message | undefined, args: Array<string> 
 		help_msg += `\n**Arguments:**`;
 
 	for (var arg of info.args)
-		help_msg += `\n\tName: ${arg.name} Type: ${arg_to_text(arg.type)}`;
+		help_msg += `\n\tName: ${arg.name} Type: ${arg_to_text(arg)}`;
 
 	help_msg +=  `\n**Required permission:**\n${perm_to_text(info.permission)}`;
 
     embed.message(msg?.channel, help_msg, "");
 }
 
-function arg_to_text(arg: any) {
-	switch(arg){
-		case args_types.text:
-			return "Text (only one word)";
-		case args_types.number:
-			return "Number (no . or ,)";
-		case args_types.text_with_spaces: 
-			return "Text (multiple words)";
-		case args_types.user_mention:
-			return "User mention (e.g. <@!691979492662444073>)"
-		default: 
-			return "An error occured";
+function cmd_ping(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
+	if (getInfo) {
+		return {
+			permission: perm.list.none,
+			description: "Test, if my connection is working.",
+			args: []
+		}
 	}
+	if (msg == undefined) return;
+	embed.message(msg?.channel, `This answer took me \`${Date.now() - msg?.createdTimestamp}\` ms.`, "");
+}
+
+function arg_to_text(arg: any) {
+	var str = "";
+	for (var i = 0; i < arg.type.length; i++) {
+		if (i != 0) str += ", or ";
+		switch(arg.type[i]){
+			case args_types.text:
+				str += "Text (only one word)";
+				break;
+			case args_types.number:
+				str += "Number (no . or ,)";
+				break;
+			case args_types.text_with_spaces:
+				str += "Text (multiple words)";
+				break;
+			case args_types.user_mention:
+				str += "User mention (e.g. <@!691979492662444073>)"
+				break;
+			case args_types.void_channel_mention:
+				str += "Voice channel mention"
+				break;
+			default: 
+				str += "An error occured";
+		}
+	}
+	return str;
 }
 
 function perm_to_text(perm_in: any) {

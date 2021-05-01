@@ -9,11 +9,16 @@ export function cmd_move_all_to_other_channel(msg: Discord.Message | undefined, 
 			permission: perm.list.manage_channels,
 			description: "Move all users from the Source Channel to the Destination Channel.",
 			args: [
-				{ name: "Id of Source Channel", type: main.args_types.number},
-				{ name: "Id of Destination Channel", type: main.args_types.number}
+				{ name: "Id of Source Channel or Source Channel mention", type: [main.args_types.number, main.args_types.void_channel_mention]},
+				{ name: "Id of Destination Channel or Destination channel mention", type: [main.args_types.number, main.args_types.void_channel_mention]}
 			]
 		}
 	}
+	
+	if (args == undefined || msg == undefined) return;
+
+	if (args[0].charAt(0) == '<') args[0] = args[0].substr(2, args[0].length - 3);
+	if (args[1].charAt(0) == '<') args[1] = args[1].substr(2, args[1].length - 3);
 
     if (msg == undefined) return;
 	if (args?.length != 2) return;
@@ -49,8 +54,8 @@ export function cmd_move_user(msg: Discord.Message | undefined, args: Array<stri
 			permission: perm.list.manage_channels,
 			description: "Move a user to a channel.",
 			args: [
-				{ name: "Id of User", type: main.args_types.number},
-				{ name: "Id of Destination Channel", type: main.args_types.number}
+				{ name: "Id of User", type: [main.args_types.number]},
+				{ name: "Id of Destination Channel", type: [main.args_types.number]}
 			]
 		}
 	}

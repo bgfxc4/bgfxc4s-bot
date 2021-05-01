@@ -10,7 +10,7 @@ export function cmd_search(msg: Discord.Message | undefined, args: Array<string>
 			permission: perm.list.tagesschau,
 			description: "Search for the 5 newest tagesschau articles with keywords",
 			args: [
-				{ name: "Keywords for the search", type: main.args_types.text}
+				{ name: "Keywords for the search", type: [main.args_types.text]}
 			]
 		}
 	}
