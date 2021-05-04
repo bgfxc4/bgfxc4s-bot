@@ -34,27 +34,6 @@ export function cmd_eval(msg: Discord.Message | undefined, args: Array<string> |
 	eval(args.join(' '));
 }
 
-export function cmd_register_commands_guild(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
-	if (getInfo) {
-		return {
-			permission: perm.list.admin,
-			description: "Register all / commands, but only for this guild",
-			args: []
-		}
-	}
-
-    if (msg == undefined) return;
-	
-	for (var cmd_group of main.cmdmap) {
-		for (var cmd of cmd_group.commands) {
-			main.client.api.applications(main.client.user.id).guilds('guild id').commands.post({data: {
-				name: 'ping',
-				description: 'ping pong!'
-			}})
-		}
-	}
-}
-
 export function cmd_temp_cmd(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {
 	if (getInfo) {
 		return {
