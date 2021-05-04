@@ -61,7 +61,7 @@ client.on("ready", () => {
 	client.user?.setActivity(config.prefix + "help", { type: "LISTENING"}).catch(console.log)
 });
 
-var cmdmap: Array<CommandGroup> = [
+export var cmdmap: Array<CommandGroup> = [
 	{ name: "General", commands: [
 		{ invoke: "help", command: cmd_help },
 		{ invoke: "group_help", command: cmd_group_help },
@@ -106,6 +106,7 @@ var cmdmap: Array<CommandGroup> = [
 	]},
 	{ name: "Debug", commands: [
 		{ invoke: "get_pid", command: debug.cmd_get_pid, show_on_list: false },
+		{ invoke: "eval", command: debug.cmd_eval, show_on_list: false },
 		{ invoke: "tmp_cmd", command: debug.cmd_temp_cmd, show_on_list: false }
 	], show_on_list: false}
 ];
@@ -253,8 +254,9 @@ function cmd_help(msg: Discord.Message | undefined, args: Array<string> | undefi
     var base = `All of the command groups are:\n`;
 
 	var help_msg = base;
-	for (var cmd_group in cmdmap) {
-		help_msg += "\n\u27A4\`" + cmdmap[cmd_group].name + "\`";
+	for (var cmd_group of cmdmap) {
+		if (cmd_group.show_on_list == true || cmd_group.show_on_list == undefined)
+			help_msg += "\n\u27A4\`" + cmd_group.name + "\`";
 	}
 	help_msg += `\n\nuse the command \`${config.prefix}group_help [group name]\` to get all commands from one group.`
     embed.message(msg?.channel, help_msg, "");
