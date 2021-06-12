@@ -101,8 +101,8 @@ export var cmdmap: Array<CommandGroup> = [
 		{ invoke: "insult", command: insults.cmd_insult},
 		{ invoke: "insult_dm", command: insults.cmd_insult_dm}
 	]},
-	{ name: "Useles stuff", commands: [
-		{ invoke: "i_feel_awesome", command: useless_stuff.cmd_IFeelAwesome}
+	{ name: "Useless stuff", commands: [
+		{ invoke: "open_source", command: useless_stuff.cmd_OpenSource}
 	]},
 	{ name: "Debug", commands: [
 		{ invoke: "get_pid", command: debug.cmd_get_pid, show_on_list: false },
@@ -268,18 +268,17 @@ function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | 
 			permission: perm.list.none,
 			description: "Get a list and short description of all commands in one group.",
 			args: [
-				{ name: "Name of group", type: [args_types.text]}
+				{ name: "Name of group", type: [args_types.text_with_spaces]}
 			]
 		}
 	}
+	
+	if (args == undefined) return
 
-	if (args?.length != 1) return;
-
-    var base = `All of the commands in the group \`${args[0]}\` are:\n\n`;
-
+    var base = `All of the commands in the group \`${args.join(' ')}\` are:\n\n`;
 	var help_msg = base;
 	for (var cmd_group in cmdmap) {
-		if (cmdmap[cmd_group].name.toLowerCase() != args[0].toLowerCase()) continue;
+		if (cmdmap[cmd_group].name.toLowerCase() != args.join(' ').toLowerCase()) continue;
 
 		if (cmdmap[cmd_group].show_on_list === false) continue;
 		var help_msgs: Array<string> = [];
@@ -297,7 +296,7 @@ function cmd_group_help(msg: Discord.Message | undefined, args: Array<string> | 
 
 		return embed.message(msg?.channel, help_msg, "");
 	}
-    embed.error(msg?.channel, `There is no command group named \`${args[0]}\`!`, "");
+    embed.error(msg?.channel, `There is no command group named \`${args.join(' ')}\`!`, "");
 }
 
 function cmd_command_help(msg: Discord.Message | undefined, args: Array<string> | undefined, getInfo: boolean | undefined) {	
